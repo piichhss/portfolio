@@ -194,7 +194,7 @@ h1 { margin: 0; font: 600 clamp(22px, 2.6vw, 30px)/1.1 var(--font-display); lett
       <span class="lbl">Nog te kopen</span>
       <span class="amt" id="total"></span>
       <span class="split" id="split"></span>
-      <p class="disclaimer">Wil je iets kopen? Laat het me even weten, zodat niemand hetzelfde koopt. Afvinken onthoudt alleen jouw eigen toestel. Elke link zoekt het product op in de juiste winkel; kijk even of kleur en uitvoering kloppen. Klik op de naam om het in 3D te zien. Het scherm telt één keer mee, zoals in je winkelwagen. Het bureau, de monitorpaal en de microfoon zijn voorbeelden. Ik heb een L-bureau van 170 × 62 cm met een zijvleugel van 80 cm getekend. De PC volgt de specificaties (kast 42,4 × 39,2 × 27,3 cm).</p>
+      <p class="disclaimer">Wil je iets kopen? Klik op "Ik koop dit" en vul je naam in, dan ziet iedereen dat jij het koopt en koopt niemand het dubbel. Vink een onderdeel af zodra het gekocht is. Elke link zoekt het product op in de juiste winkel; kijk even of kleur en uitvoering kloppen. Klik op de naam om het in 3D te zien. Het scherm telt één keer mee, zoals in je winkelwagen. Het bureau, de monitorpaal en de microfoon zijn voorbeelden. Ik heb een L-bureau van 170 × 62 cm met een zijvleugel van 80 cm getekend. De PC volgt de specificaties (kast 42,4 × 39,2 × 27,3 cm).</p>
     </div>
   </aside>
 </div>
@@ -352,80 +352,71 @@ h1 { margin: 0; font: 600 clamp(22px, 2.6vw, 30px)/1.1 var(--font-display); lett
   renderChecklist();
   syncNote.textContent = 'Opslaan wordt verbonden…';
 
-  let db = null, writing = {};
+  // ---------- Gedeelde lijst: reserveringen en afvinken worden bewaard in een Google Sheet (Apps Script) ----------
+  const SHEET_URL = 'https://script.google.com/macros/s/AKfycbxqLh5WMDeYRYsAhX8X1h6q9x4TOvd609xVBesHwt9ILlmsiElNNHRwexM5hQL60CqR/exec';
+  let busy = 0;
+  let myName = ''; try { myName = localStorage.getItem('kerst-naam') || ''; } catch (e) {}
+  let token = ''; try { token = localStorage.getItem('kerst-toestel') || ''; } catch (e) {}
+  if (!token) { token = Math.random().toString(36).slice(2) + Date.now().toString(36); try { localStorage.setItem('kerst-toestel', token); } catch (e) {} }
+  myId = token;
+  async function api(params) {
+    const q = new URLSearchParams(Object.assign({ token }, params));
+    const r = await fetch(SHEET_URL + '?' + q, { cache: 'no-store' });
+    if (!r.ok) throw new Error('http ' + r.status);
+    const j = await r.json();
+    if (j && j.items) {
+      const nextC = {}, nextB = {};
+      Object.keys(j.items).forEach(id => {
+        if (!BY_ID[id]) return;
+        const it = j.items[id];
+        if (it.bought) nextB[id] = true;
+        if (it.name) { const by = it.mine ? myId : 'naam:' + id; nextC[id] = { by }; names[by] = it.name; }
+      });
+      checked = nextB; claims = nextC; claimsOn = true;
+      renderChecklist();
+    }
+    return j;
+  }
   list.addEventListener('click', async e => {
-    const b = e.target.closest('[data-claim], [data-unclaim]'); if (!b || !db || !claimsOn) return;
+    const b = e.target.closest('[data-claim], [data-unclaim]'); if (!b || !claimsOn || busy) return;
     const id = b.dataset.claim || b.dataset.unclaim;
-    if (claimBusy[id]) return; claimBusy[id] = true; b.disabled = true;
+    if (b.dataset.claim && !myName) {
+      const n = (prompt('Wat is je naam? Dan ziet iedereen dat jij dit koopt.') || '').trim().slice(0, 40);
+      if (!n) return;
+      myName = n; try { localStorage.setItem('kerst-naam', n); } catch (e) {}
+    }
+    busy++; b.disabled = true;
     try {
-      if (b.dataset.claim) { claims[id] = { by: myId }; renderClaims(); await db.doc('claims/' + id).set({ by: myId, at: new Date().toISOString() }); }
-      else { delete claims[id]; renderClaims(); await db.doc('claims/' + id).delete(); }
-    } catch (err) {
-      syncNote.textContent = err && err.code === 'invalid_argument' ? 'Je kunt deze lijst bekijken, maar niets reserveren.' : 'Reserveren lukte niet. Probeer het zo nog eens.';
-    } finally { delete claimBusy[id]; }
+      const j = await api(b.dataset.claim ? { action: 'claim', id, name: myName, label: BY_ID[id].name } : { action: 'unclaim', id });
+      if (j && j.error === 'taken') syncNote.textContent = j.name + ' was je net voor en koopt dit al.';
+    } catch (err) { syncNote.textContent = 'Reserveren lukte niet. Probeer het zo nog eens.'; renderClaims(); }
+    finally { busy--; }
   });
   list.addEventListener('click', async e => {
     const c = e.target.closest('.check'); if (!c || c.disabled) return;
     const id = c.dataset.check, val = !checked[id];
     if (val) checked[id] = true; else delete checked[id];
     renderChecklist();
-    if (store === 'local' || !db) { saveLocal(); return; }
-    if (writing[id]) { writing[id].next = val; return; }      // één schrijfactie tegelijk per item
-    writing[id] = { next: val };
-    try {
-      while (writing[id] && 'next' in writing[id]) {
-        const v = writing[id].next; delete writing[id].next;
-        await db.doc('checklist/' + id).set({ bought: v, at: new Date().toISOString() });
-      }
-    } catch (err) {
-      if (err && err.code === 'invalid_argument') { canWrite = false; syncNote.textContent = 'Je kunt deze lijst bekijken, maar niet afvinken.'; renderChecklist(); }
-      else syncNote.textContent = 'Opslaan lukte niet. Probeer het zo nog eens.';
-    } finally { delete writing[id]; }
+    if (store === 'local') { saveLocal(); return; }
+    busy++; c.disabled = true;
+    try { await api({ action: 'bought', id, val: val ? '1' : '0', label: BY_ID[id].name }); }
+    catch (err) { syncNote.textContent = 'Opslaan lukte niet. Probeer het zo nog eens.'; }
+    finally { busy--; renderChecklist(); }
   });
-
-  (async () => {
-    const cl = window.claude && typeof window.claude.use === 'function' ? window.claude : null;
-    db = cl ? await cl.use('db').catch(() => null) : null;
-    if (!db) { syncNote.textContent = 'Afvinken wordt alleen op dit apparaat bewaard.'; return; }
-    const user = await cl.use('user').catch(() => null);
-    const w = user && user.can ? await Promise.resolve(user.can('data.write')).catch(() => null) : null;
-    if (w === false) canWrite = false;
-    store = 'db';
-    if (user) {
-      myId = await user.id().catch(() => null);
-      iAmOwner = await Promise.resolve(user.isOwner()).catch(() => false);
-    }
-    if (myId) {
-      claimsOn = true;
-      db.collection('claims').onSnapshot(snap => {
-        const next = {};
-        snap.docs.forEach(d => { const v = d.data(); if (v && typeof v.by === 'string' && BY_ID[d.id]) next[d.id] = { by: v.by }; });
-        Object.keys(claimBusy).forEach(id => { if (claims[id]) next[id] = claims[id]; else delete next[id]; });
-        claims = next;
-        renderClaims();
-        const ids = [...new Set(Object.values(claims).map(c => c.by))].filter(i => i !== myId);
-        if (ids.length && user.profiles) user.profiles(ids).then(ps => { ids.forEach(i => { names[i] = (ps[i] && ps[i].name) || ''; }); renderClaims(); }).catch(() => {});
-      }, () => { claimsOn = false; BUY.forEach(p => { const el = document.getElementById('claim-' + p.id); if (el) el.textContent = ''; }); });
-    }
-    let first = true;
-    const timer = setTimeout(() => { syncNote.textContent = 'De opgeslagen lijst is nog niet bereikbaar; wat je ziet kan verouderd zijn.'; }, 10000);
-    db.collection('checklist').onSnapshot(snap => {
-      const next = {};
-      snap.docs.forEach(d => { const v = d.data(); if (v && v.bought && BY_ID[d.id]) next[d.id] = true; });
-      Object.keys(writing).forEach(id => { if (checked[id]) next[id] = true; else delete next[id]; });
-      checked = next;
-      if (!snap.metadata.fromCache) {
-        clearTimeout(timer);
-        syncNote.textContent = canWrite ? 'Opgeslagen bij deze pagina, ook op je telefoon.' : 'Je kunt deze lijst bekijken, maar niet afvinken.';
-      }
-      if (first) { first = false; }
-      renderChecklist();
-    }, () => {
-      clearTimeout(timer);
-      store = 'local'; loadLocal(); renderChecklist();
-      syncNote.textContent = 'Opslaan bij de pagina lukt niet; afvinken wordt nu alleen op dit apparaat bewaard.';
-    });
-  })();
+  if (!SHEET_URL) {
+    syncNote.textContent = 'Afvinken wordt alleen op dit apparaat bewaard.';
+  } else {
+    store = 'sheet'; checked = {}; renderChecklist();
+    syncNote.textContent = 'Lijst wordt geladen…';
+    const refresh = () => {
+      if (busy) return;
+      api({}).then(() => { syncNote.textContent = 'Iedereen met deze link ziet wie wat koopt.'; })
+        .catch(() => { syncNote.textContent = 'De gedeelde lijst is even niet bereikbaar; wat je ziet kan verouderd zijn.'; });
+    };
+    refresh();
+    setInterval(refresh, 20000);
+    document.addEventListener('visibilitychange', () => { if (!document.hidden) refresh(); });
+  }
 
   const stage = document.getElementById('stage');
   if (!window.THREE || !THREE.OrbitControls) {
