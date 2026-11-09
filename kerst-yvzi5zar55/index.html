@@ -141,60 +141,64 @@ h1 { margin: 0; font: 600 clamp(22px, 2.6vw, 30px)/1.1 var(--font-display); lett
   <section class="stage" id="stage" aria-label="3D-model van de bureau-setup">
     <header class="hud-top">
       <p class="eyebrow" id="eyebrow">Ontwerp 1 · donkere muur</p>
-      <h1>Witte bureau-setup</h1>
-      <p class="sub">L-bureau · 2 × Philips Evnia 24" · microfoonarm · O11 Dynamic Mini V2 met RTX 5060 Ti</p>
+      <h1 data-fr="Setup de bureau blanc">Witte bureau-setup</h1>
+      <p class="sub" data-fr='Bureau en L · 2 × Philips Evnia 24" · bras de micro · O11 Dynamic Mini V2 avec RTX 5060 Ti'>L-bureau · 2 × Philips Evnia 24" · microfoonarm · O11 Dynamic Mini V2 met RTX 5060 Ti</p>
       <div class="chips">
-        <span class="chip"><b>L</b>-vormig bureau</span>
-        <span class="chip"><b>2 × 24"</b> boven elkaar</span>
-        <span class="chip"><b>glazen</b> muismat</span>
-        <span class="chip warn"><b>Shield</b> past naast fans onderin?</span>
+        <span class="chip" data-fr="bureau en <b>L</b>"><b>L</b>-vormig bureau</span>
+        <span class="chip" data-fr='<b>2 × 24"</b> superposés'><b>2 × 24"</b> boven elkaar</span>
+        <span class="chip" data-fr="tapis de souris en <b>verre</b>"><b>glazen</b> muismat</span>
+        <span class="chip warn" data-fr="Le <b>Shield</b> passe-t-il à côté des ventilateurs du bas ?"><b>Shield</b> past naast fans onderin?</span>
       </div>
       <p class="selcap" id="selcap" aria-live="polite"></p>
     </header>
 
     <div class="hud-bottom">
+      <div class="group" role="group" aria-label="Taal / Langue">
+        <button class="btn" data-lang="nl" aria-pressed="true" lang="nl">NL</button>
+        <button class="btn" data-lang="fr" aria-pressed="false" lang="fr">FR</button>
+      </div>
       <div class="group" role="group" aria-label="RGB-verlichting">
         <span class="group-label">RGB</span>
-        <button class="btn" data-mode="rainbow" aria-pressed="true"><span class="dot rainbow"></span>Regenboog</button>
-        <button class="btn" data-mode="ice" aria-pressed="false"><span class="dot ice"></span>IJsblauw</button>
-        <button class="btn" data-mode="purple" aria-pressed="false"><span class="dot purple"></span>Paars</button>
-        <button class="btn" data-mode="white" aria-pressed="false"><span class="dot white"></span>Wit</button>
-        <button class="btn" data-mode="off" aria-pressed="false"><span class="dot off"></span>Uit</button>
+        <button class="btn" data-mode="rainbow" aria-pressed="true"><span class="dot rainbow"></span><span data-fr="Arc-en-ciel">Regenboog</span></button>
+        <button class="btn" data-mode="ice" aria-pressed="false"><span class="dot ice"></span><span data-fr="Bleu glacier">IJsblauw</span></button>
+        <button class="btn" data-mode="purple" aria-pressed="false"><span class="dot purple"></span><span data-fr="Violet">Paars</span></button>
+        <button class="btn" data-mode="white" aria-pressed="false"><span class="dot white"></span><span data-fr="Blanc">Wit</span></button>
+        <button class="btn" data-mode="off" aria-pressed="false"><span class="dot off"></span><span data-fr="Éteint">Uit</span></button>
       </div>
       <div class="group" role="group" aria-label="Ontwerp">
-        <span class="group-label">Ontwerp</span>
-        <button class="btn" data-design="1" aria-pressed="true"><span class="dot" style="background:#1c2029;border:1px solid #5a6070"></span>1 · donker</button>
-        <button class="btn" data-design="2" aria-pressed="false"><span class="dot" style="background:#dfe2e7"></span>2 · witte muur</button>
+        <span class="group-label" data-fr="Design">Ontwerp</span>
+        <button class="btn" data-design="1" aria-pressed="true"><span class="dot" style="background:#1c2029;border:1px solid #5a6070"></span><span data-fr="1 · sombre">1 · donker</span></button>
+        <button class="btn" data-design="2" aria-pressed="false"><span class="dot" style="background:#dfe2e7"></span><span data-fr="2 · mur blanc">2 · witte muur</span></button>
       </div>
       <div class="group" role="group" aria-label="Weergave">
-        <button class="btn" id="t-night" aria-pressed="false">Avond</button>
-        <button class="btn" id="t-vert" aria-pressed="true">GPU verticaal</button>
-        <button class="btn" id="t-rotate" aria-pressed="true">Draaien</button>
-        <button class="btn" id="t-fans" aria-pressed="true">Fans aan</button>
-        <button class="btn" id="t-lamp" aria-pressed="true">Schermlamp</button>
-        <button class="btn" id="t-chair" aria-pressed="false">Stoel</button>
+        <button class="btn" id="t-night" aria-pressed="false" data-fr="Soir">Avond</button>
+        <button class="btn" id="t-vert" aria-pressed="true" data-fr="GPU vertical">GPU verticaal</button>
+        <button class="btn" id="t-rotate" aria-pressed="true" data-fr="Rotation">Draaien</button>
+        <button class="btn" id="t-fans" aria-pressed="true" data-fr="Ventilateurs">Fans aan</button>
+        <button class="btn" id="t-lamp" aria-pressed="true" data-fr="Lampe d’écran">Schermlamp</button>
+        <button class="btn" id="t-chair" aria-pressed="false" data-fr="Chaise">Stoel</button>
       </div>
       <div class="group" role="group" aria-label="Camera">
-        <button class="btn" id="v-home">Overzicht</button>
-        <button class="btn" id="v-pc">PC dichtbij</button>
+        <button class="btn" id="v-home" data-fr="Vue d’ensemble">Overzicht</button>
+        <button class="btn" id="v-pc" data-fr="PC de près">PC dichtbij</button>
       </div>
-      <span class="hint">Sleep om te draaien · scrol om te zoomen · klik op iets</span>
+      <span class="hint" data-fr="Glissez pour tourner · faites défiler pour zoomer · cliquez sur un objet">Sleep om te draaien · scrol om te zoomen · klik op iets</span>
     </div>
   </section>
 
   <aside class="panel" aria-label="Onderdelen">
     <div class="panel-head">
-      <h2>Boodschappenlijst</h2>
+      <h2 data-fr="Liste d’achats">Boodschappenlijst</h2>
       <p id="count"></p>
     </div>
     <div class="progress" aria-hidden="true"><span id="bar"></span></div>
     <p class="sync" id="sync" aria-live="polite"></p>
     <ul class="list" id="list"></ul>
     <div class="total">
-      <span class="lbl">Nog te kopen</span>
+      <span class="lbl" data-fr="Reste à acheter">Nog te kopen</span>
       <span class="amt" id="total"></span>
       <span class="split" id="split"></span>
-      <p class="disclaimer">Wil je iets kopen? Klik op "Ik koop dit" en vul je naam in, dan ziet iedereen dat jij het koopt en koopt niemand het dubbel. Vink een onderdeel af zodra het gekocht is. Elke link zoekt het product op in de juiste winkel; kijk even of kleur en uitvoering kloppen. Klik op de naam om het in 3D te zien. Het scherm telt één keer mee, zoals in je winkelwagen. Het bureau, de monitorpaal en de microfoon zijn voorbeelden. Ik heb een L-bureau van 170 × 62 cm met een zijvleugel van 80 cm getekend. De PC volgt de specificaties (kast 42,4 × 39,2 × 27,3 cm).</p>
+      <p class="disclaimer" data-fr="Vous voulez acheter quelque chose ? Cliquez sur « Je l’achète » et entrez votre nom : tout le monde verra que vous l’achetez, et personne ne l’achètera en double. Cochez un article dès qu’il est acheté. Chaque lien recherche le produit dans la bonne boutique ; vérifiez bien la couleur et le modèle. Cliquez sur le nom pour le voir en 3D. L’écran compte une seule fois, comme dans le panier. Le bureau, le pied d’écran et le micro sont des exemples. Le bureau dessiné est un bureau en L de 170 × 62 cm avec une aile de 80 cm. Le PC suit les dimensions réelles (boîtier 42,4 × 39,2 × 27,3 cm).">Wil je iets kopen? Klik op "Ik koop dit" en vul je naam in, dan ziet iedereen dat jij het koopt en koopt niemand het dubbel. Vink een onderdeel af zodra het gekocht is. Elke link zoekt het product op in de juiste winkel; kijk even of kleur en uitvoering kloppen. Klik op de naam om het in 3D te zien. Het scherm telt één keer mee, zoals in je winkelwagen. Het bureau, de monitorpaal en de microfoon zijn voorbeelden. Ik heb een L-bureau van 170 × 62 cm met een zijvleugel van 80 cm getekend. De PC volgt de specificaties (kast 42,4 × 39,2 × 27,3 cm).</p>
     </div>
   </aside>
 </div>
@@ -236,6 +240,64 @@ h1 { margin: 0; font: 600 clamp(22px, 2.6vw, 30px)/1.1 var(--font-display); lett
     { id: 'desk',    desk: true, cat: 'Bureau',        name: 'Wit L-bureau', price: null, note: 'Voorbeeld: 170 cm breed met een zijvleugel van 80 cm. De PC staat op de hoek, zodat hij niet in de weg staat en je het glas ziet.' },
   ];
   const BY_ID = Object.fromEntries(PARTS.map(p => [p.id, p]));
+
+  // ---------- Taal: Nederlands (standaard) of Frans. Alles staat in het Nederlands in de code; FR vertaalt per tekst. ----------
+  let lang = 'nl';
+  try {
+    const q = new URLSearchParams(location.search).get('lang');
+    const saved = localStorage.getItem('kerst-taal');
+    lang = q === 'fr' || q === 'nl' ? q : saved === 'fr' || saved === 'nl' ? saved : (navigator.language || '').toLowerCase().startsWith('fr') ? 'fr' : 'nl';
+  } catch (e) {}
+  const FR = {
+    'Megekko': 'Megekko', 'Amazon': 'Amazon', 'AliExpress': 'AliExpress',
+    'Decoratie · Amazon': 'Décoration · Amazon', 'Optioneel · telt niet mee': 'Optionnel · hors total', 'Bureau · voorbeeld, niet te koop': 'Bureau · exemple, pas à vendre',
+    'Zoek op Amazon': 'Chercher sur Amazon', 'Zoek op AliExpress': 'Chercher sur AliExpress', 'Zoek op Megekko': 'Chercher sur Megekko',
+    ' (opent in een nieuw tabblad)': ' (s’ouvre dans un nouvel onglet)', ' gekocht': ' acheté',
+    'alles binnen ✓': 'tout est acheté ✓', ' · nog ': ' · reste ', ' van ': ' sur ', ' gekocht ': ' achetés ', 'Al gekocht ': 'Déjà acheté ', ' · optioneel nog ': ' · optionnel encore ',
+    'Jij koopt dit': 'Vous l’achetez', 'Iemand': 'Quelqu’un', ' koopt dit': ' l’achète', 'Toch niet': 'Annuler', 'Vrijgeven': 'Libérer',
+    'Ik koop dit': 'Je l’achète', 'Ik koop ': 'J’achète ', ' gereserveerd': ' réservé(s)',
+    'Afvinken wordt alleen op dit apparaat bewaard.': 'Les cases cochées sont gardées uniquement sur cet appareil.',
+    'Lijst wordt geladen…': 'Chargement de la liste…',
+    'Iedereen met deze link ziet wie wat koopt.': 'Tous ceux qui ont ce lien voient qui achète quoi.',
+    'De gedeelde lijst is even niet bereikbaar; wat je ziet kan verouderd zijn.': 'La liste partagée est momentanément injoignable ; ce que vous voyez n’est peut-être pas à jour.',
+    'Reserveren lukte niet. Probeer het zo nog eens.': 'La réservation a échoué. Réessayez dans un instant.',
+    'Opslaan lukte niet. Probeer het zo nog eens.': 'L’enregistrement a échoué. Réessayez dans un instant.',
+    ' was je net voor en koopt dit al.': ' a été plus rapide et l’achète déjà.',
+    'Wat is je naam? Dan ziet iedereen dat jij dit koopt.': 'Quel est votre nom ? Tout le monde verra que vous achetez ceci.',
+    'Het 3D-model kon niet laden. Controleer je internetverbinding en herlaad de pagina.': 'Le modèle 3D n’a pas pu se charger. Vérifiez votre connexion internet et rechargez la page.',
+    'Ontwerp 1 · donkere muur': 'Design 1 · mur sombre', 'Ontwerp 2 · witte muur': 'Design 2 · mur blanc',
+    'Kerstlijst Pich': 'Liste de Noël de Pich',
+  };
+  const T = t => (lang === 'fr' && FR[t] != null ? FR[t] : t);
+  // Franse namen, categorieën, labels en uitleg per onderdeel (productnamen blijven waar ze geen Nederlands bevatten)
+  const FRP = {
+    case: { cat: 'Boîtier', name: 'Lian Li O11 Dynamic Mini V2 Flow, blanc', note: 'Posé en biais dans l’angle du bureau en L, la vitre latérale tournée vers la chaise. Les 5 ventilateurs fournis ne sont pas utilisés (pas de RGB).' },
+    cpu: { cat: 'Processeur', note: 'Se trouve sous la pompe du watercooling. Pas de partie graphique intégrée.' },
+    mobo: { cat: 'Carte mère', note: 'ATX, blanche, avec Wi-Fi et 4 emplacements RAM. Le SSD se trouve sous le dissipateur M.2 blanc.' },
+    ram: { cat: 'Mémoire', note: 'Dans les emplacements 2 et 4 ; deux emplacements restent libres. Dessinées en blanc, car les barrettes vont être peintes.' },
+    ssd: { cat: 'Stockage', flag: 'petit', note: 'Sous le dissipateur M.2 de la carte mère. 500 Go se remplissent vite avec de la vidéo.' },
+    gpu: { cat: 'Carte graphique', note: 'Les deux écrans se branchent directement sur la carte graphique (le 245KF n’a pas de partie graphique). En vertical, il faut un câble riser.' },
+    aio: { cat: 'Watercooling', name: 'Cougar Poseidon Vistek Pro ARGB 360, blanc', note: 'Radiateur de 360 mm en haut avec 3 ventilateurs ARGB en extraction, et un petit écran sur la pompe.' },
+    f360: { cat: 'Ventilateurs du bas', name: 'Cougar Unity 360 ARGB, blanc', note: '3 ventilateurs en bas qui soufflent de l’air frais vers la carte graphique.' },
+    f240: { cat: 'Ventilateurs latéraux', name: 'Cougar Unity 240 ARGB Reverse Blade, blanc', note: '2 ventilateurs sur la paroi latérale qui font entrer l’air.' },
+    psu: { cat: 'Alimentation', name: 'Gigabyte UD750GM PG5 V2 Ice 750 W, blanc', note: 'Dans la chambre arrière, derrière le plateau de la carte mère.' },
+    hub: { cat: 'Hub ventilateurs', note: 'Derrière le plateau de la carte mère. Pratique pour brancher les 8 ventilateurs et leur éclairage.' },
+    monitor: { cat: 'Écrans', flag: '1 dans le panier', name: 'Philips Evnia 24M2N3201PL, 24 pouces, blanc', note: '24 pouces, 1080p, 260 Hz, IPS. Il y en a 1 dans le panier ; pour deux écrans superposés, il en faut 2 (ou un déjà à la maison), plus un bras double (VESA), car le pied d’origine ne permet pas de les empiler.' },
+    shield: { cat: 'Support GPU', flag: 'à vérifier', name: 'Support GPU vertical EZDIY-FAB Shield ARGB, blanc', note: 'Avec riser PCIe 4.0 de 11,5 cm et ARGB. Règle le problème du riser. À vérifier : passe-t-il au-dessus des ventilateurs Unity 360 du bas ? Le O11 Mini V2 a déjà son propre support vertical ; dans ce cas, un simple câble riser suffit.' },
+    mic: { cat: 'Bras de micro', name: 'Bras de micro TONOR profil bas, blanc', note: 'Se fixe sur le bord arrière du bureau. Le micro n’est pas inclus : il est dessiné à titre d’exemple.' },
+    phones: { cat: 'Écouteurs', name: 'Sennheiser CX 80U, USB-C, blanc', note: 'Filaires avec prise USB-C, télécommande et micro intégrés au câble.' },
+    lamp: { cat: 'Lampe d’écran', name: 'Yeelight Monitor Light Bar 40 cm, blanc', note: 'Se pose sur l’écran du haut et éclaire le bureau en biais, sans reflet sur l’écran. Avec télécommande sans fil, intensité réglable en continu ; alimentée par USB. Allumez-la ou éteignez-la avec le bouton « Lampe d’écran ».' },
+    pad: { cat: 'Tapis de souris', name: 'Tapis de souris en verre darkFlash DMP300, blanc, 30 × 26 cm', note: 'Verre trempé avec une surface gravée ultra-lisse et un dessous antidérapant en caoutchouc. La RS6 a un capteur optique, elle fonctionne donc bien dessus.' },
+    led: { cat: 'Ruban LED', name: 'Ruban LED Goffii 10 m, Bluetooth, RGB', note: 'Autocollant, avec télécommande et appli. Fixé au mur derrière le bureau ; 10 m suffisent largement pour longer aussi l’aile. C’est un ruban RGB classique : le bleu glacier rend très bien, mais son blanc est un mélange de rouge, vert et bleu et paraît donc un peu plus bleu ou violet que le blanc des ventilateurs.' },
+    mouse: { cat: 'Souris', name: 'SMAILWOLF RS6 sans fil, argent', note: 'Souris gaming légère (env. 59 g) avec capteur PAW3311, sans fil en 2,4 G/Bluetooth ou filaire. Blanche avec un motif craquelé gris. Le PAW3311 est un capteur optique, elle fonctionne donc bien sur le verre.' },
+    keys: { cat: 'Clavier', name: 'Ajazz Nacodex NK68 filaire, blanc', note: 'Format 65 % avec 68 touches, hot-swap, switches rouges (légers et silencieux), RGB sous les touches et une barre lumineuse. Filaire. Grâce au petit format, il reste plus de place pour la souris.' },
+    shelf: { cat: 'Étagères murales', name: 'Étagères flottantes OUDIE, blanches, lot de 3 (40 × 15 cm)', note: 'Trois étagères blanches de 40 × 15 × 1,5 cm avec fixation invisible. Deux à gauche des écrans, une au-dessus du PC. Les livres et les pots posés dessus sont des exemples ; les plantes sont le lot Der Rose. À fixer dans un mur où les vis tiennent bien, sans objets lourds dessus.' },
+    plants: { cat: 'Plantes artificielles', name: 'Mini-plantes artificielles Der Rose, lot de 4 en pot', note: 'Romarin, eucalyptus, un aloès et une plante grasse, chacun dans un petit pot gris effet béton. Deux sur l’étagère au-dessus du PC, une sur l’étagère basse à gauche et une sur le bureau à côté du bras de micro. Ni eau ni lumière nécessaires.' },
+    chair: { cat: 'Chaise de bureau', flag: 'optionnel', name: 'Chaise de bureau ergonomique Ergoreal, gris-blanc', note: 'Pas indispensable, mais agréable. Dossier en mesh avec soutien lombaire réglable et appui-tête 2D, accoudoirs rabattables, roulettes silencieuses, jusqu’à 200 kg. Environ 68 × 63 × 144 cm. Pas compté dans le total ; affichez-la en 3D avec le bouton « Chaise ».' },
+    desk: { cat: 'Bureau', name: 'Bureau blanc en L', note: 'Exemple : 170 cm de large avec une aile de 80 cm. Le PC est posé dans l’angle, pour ne pas gêner et laisser voir la vitre.' },
+  };
+  const PT = (p, key) => (lang === 'fr' && FRP[p.id] && FRP[p.id][key] != null ? FRP[p.id][key] : p[key]);
+  const langHooks = [];
   // Zoektermen per onderdeel, zodat familie het juiste product vindt
   const LINKQ = {
     case: 'Lian Li O11 Dynamic Mini V2 Flow White', cpu: 'Intel Core Ultra 5 245KF', mobo: 'ASUS ROG STRIX B860-A GAMING WIFI',
@@ -250,43 +312,49 @@ h1 { margin: 0; font: 600 clamp(22px, 2.6vw, 30px)/1.1 var(--font-display); lett
   function shopLink(p) {
     const q = LINKQ[p.id]; if (!q) return null;
     const shop = p.shop || 'megekko';
-    if (shop === 'amazon') return { href: 'https://www.amazon.nl/s?k=' + encodeURIComponent(q), label: 'Zoek op Amazon' };
-    if (shop === 'ali') return { href: 'https://nl.aliexpress.com/w/wholesale-' + encodeURIComponent(q.replace(/\s+/g, '-')) + '.html', label: 'Zoek op AliExpress' };
-    return { href: 'https://www.google.com/search?q=' + encodeURIComponent('site:megekko.nl ' + q), label: 'Zoek op Megekko' };
+    if (shop === 'amazon') return { href: 'https://www.amazon.nl/s?k=' + encodeURIComponent(q), label: T('Zoek op Amazon') };
+    if (shop === 'ali') return { href: 'https://nl.aliexpress.com/w/wholesale-' + encodeURIComponent(q.replace(/\s+/g, '-')) + '.html', label: T('Zoek op AliExpress') };
+    return { href: 'https://www.google.com/search?q=' + encodeURIComponent('site:megekko.nl ' + q), label: T('Zoek op Megekko') };
   }
-  const eur = new Intl.NumberFormat('nl-NL', { style: 'currency', currency: 'EUR' });
+  const EUR = { nl: new Intl.NumberFormat('nl-BE', { style: 'currency', currency: 'EUR' }), fr: new Intl.NumberFormat('fr-BE', { style: 'currency', currency: 'EUR' }) };
+  const eur = { format: v => EUR[lang].format(v) };
 
   const list = document.getElementById('list');
   const groupOf = p => p.desk ? 'desk' : p.optional ? 'optional' : p.grp ? p.grp : (p.shop || 'megekko');
   const SEP = { megekko: 'Megekko', amazon: 'Amazon', ali: 'AliExpress', deco: 'Decoratie · Amazon', optional: 'Optioneel · telt niet mee', desk: 'Bureau · voorbeeld, niet te koop' };
   const CHECK_SVG = '<svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M2.5 7.4l3 3 6-6.6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  let selCurrent = null;
+  function buildList() {
+  list.textContent = '';
   let lastGroup = null;
   PARTS.forEach(p => {
     if (groupOf(p) !== lastGroup) {
       lastGroup = groupOf(p);
       const s = document.createElement('li'); s.className = 'sep'; s.dataset.group = lastGroup;
-      s.innerHTML = '<span>' + SEP[lastGroup] + '</span><span class="sep-n"></span>';
+      s.innerHTML = '<span>' + T(SEP[lastGroup]) + '</span><span class="sep-n"></span>';
       list.appendChild(s);
     }
     const li = document.createElement('li');
     li.className = 'row' + (p.desk ? ' nocheck' : '');
     li.id = 'row-' + p.id;
     li.innerHTML = (p.desk ? '<span class="check-gap"></span>' :
-        '<button class="check" role="checkbox" aria-checked="false" data-check="' + p.id + '" aria-label="' + p.name + ' gekocht">' + CHECK_SVG + '</button>') +
-      '<button class="part" id="part-' + p.id + '" data-id="' + p.id + '" aria-pressed="false">' +
-      '<span class="cat">' + p.cat + (p.flag ? '<span class="flag">' + p.flag + '</span>' : '') + '</span>' +
-      '<span class="name">' + p.name + '</span>' +
+        '<button class="check" role="checkbox" aria-checked="false" data-check="' + p.id + '" aria-label="' + PT(p, 'name') + T(' gekocht') + '">' + CHECK_SVG + '</button>') +
+      '<button class="part" id="part-' + p.id + '" data-id="' + p.id + '" aria-pressed="' + (selCurrent === p.id) + '">' +
+      '<span class="cat">' + PT(p, 'cat') + (p.flag ? '<span class="flag">' + PT(p, 'flag') + '</span>' : '') + '</span>' +
+      '<span class="name">' + PT(p, 'name') + '</span>' +
       '<span class="price' + (p.price == null ? ' na' : '') + '">' + (p.price == null ? '—' : eur.format(p.price)) + '</span>' +
-      '<span class="note">' + p.note + '</span></button>';
+      '<span class="note">' + PT(p, 'note') + '</span></button>';
     const lk = shopLink(p);
     if (lk) {
       const a = document.createElement('a'); a.className = 'buy'; a.href = lk.href; a.target = '_blank'; a.rel = 'noopener';
-      a.textContent = lk.label + ' ↗'; a.setAttribute('aria-label', lk.label + ': ' + p.name + ' (opent in een nieuw tabblad)');
+      a.textContent = lk.label + ' ↗'; a.setAttribute('aria-label', lk.label + ': ' + PT(p, 'name') + T(' (opent in een nieuw tabblad)'));
       li.appendChild(a);
     }
     if (!p.desk) { const cd = document.createElement('div'); cd.className = 'claim'; cd.id = 'claim-' + p.id; li.appendChild(cd); }
     list.appendChild(li);
   });
+  }
+  buildList();
 
   // ---------- Checklist: afvinken wat je gekocht hebt ----------
   const BUY = PARTS.filter(p => !p.desk);
@@ -295,6 +363,8 @@ h1 { margin: 0; font: 600 clamp(22px, 2.6vw, 30px)/1.1 var(--font-display); lett
   // Reserveringen: "Ik koop dit", zodat familie niet dubbel koopt. Alleen ids opslaan, namen bij het tonen ophalen.
   let claims = {}, claimsOn = false, myId = null, iAmOwner = false, names = {}, claimBusy = {}, countBase = '';
   const syncNote = document.getElementById('sync');
+  let syncKey = '', syncPre = '';
+  function setSync(key, pre) { syncKey = key; syncPre = pre || ''; syncNote.textContent = syncPre + T(key); }
   function renderChecklist() {
     const CORE = BUY.filter(p => !p.optional);
     const got = CORE.filter(p => checked[p.id]);
@@ -313,13 +383,13 @@ h1 { margin: 0; font: 600 clamp(22px, 2.6vw, 30px)/1.1 var(--font-display); lett
       const items = BUY.filter(p => groupOf(p) === g);
       const n = items.filter(p => checked[p.id]).length;
       const left = items.filter(p => !checked[p.id]).reduce((a, p) => a + p.price, 0);
-      s.querySelector('.sep-n').textContent = n === items.length ? 'alles binnen ✓' : n + '/' + items.length + ' · nog ' + eur.format(left);
+      s.querySelector('.sep-n').textContent = n === items.length ? T('alles binnen ✓') : n + '/' + items.length + T(' · nog ') + eur.format(left);
     });
-    countBase = got.length + ' van ' + CORE.length + ' gekocht';
+    countBase = got.length + T(' van ') + CORE.length + T(' gekocht ').trimEnd();
     document.getElementById('count').textContent = countBase;
     document.getElementById('bar').style.width = (CORE.length ? (got.length / CORE.length) * 100 : 0) + '%';
     document.getElementById('total').textContent = eur.format(all - spent);
-    document.getElementById('split').textContent = 'Al gekocht ' + eur.format(spent) + ' van ' + eur.format(all) + (optLeft ? ' · optioneel nog ' + eur.format(optLeft) : '');
+    document.getElementById('split').textContent = T('Al gekocht ') + eur.format(spent) + T(' van ') + eur.format(all) + (optLeft ? T(' · optioneel nog ') + eur.format(optLeft) : '');
     renderClaims();
   }
   function renderClaims() {
@@ -333,24 +403,24 @@ h1 { margin: 0; font: 600 clamp(22px, 2.6vw, 30px)/1.1 var(--font-display); lett
       if (c) {
         n++;
         const tag = document.createElement('span'); tag.className = 'claimed';
-        tag.textContent = c.by === myId ? 'Jij koopt dit' : ((names[c.by] || 'Iemand') + ' koopt dit');
+        tag.textContent = c.by === myId ? T('Jij koopt dit') : ((names[c.by] || T('Iemand')) + T(' koopt dit'));
         el.appendChild(tag);
         if (canWrite && (c.by === myId || iAmOwner)) {
           const b = document.createElement('button'); b.className = 'claim-btn'; b.dataset.unclaim = p.id;
-          b.textContent = c.by === myId ? 'Toch niet' : 'Vrijgeven'; el.appendChild(b);
+          b.textContent = c.by === myId ? T('Toch niet') : T('Vrijgeven'); el.appendChild(b);
         }
       } else if (canWrite) {
         const b = document.createElement('button'); b.className = 'claim-btn'; b.dataset.claim = p.id;
-        b.textContent = 'Ik koop dit'; b.setAttribute('aria-label', 'Ik koop ' + p.name); el.appendChild(b);
+        b.textContent = T('Ik koop dit'); b.setAttribute('aria-label', T('Ik koop ') + PT(p, 'name')); el.appendChild(b);
       }
     });
-    document.getElementById('count').textContent = countBase + (n ? ' · ' + n + ' gereserveerd' : '');
+    document.getElementById('count').textContent = countBase + (n ? ' · ' + n + T(' gereserveerd') : '');
   }
   function loadLocal() { try { checked = JSON.parse(localStorage.getItem('bureau-checklist') || '{}') || {}; } catch (e) { checked = {}; } }
   function saveLocal() { try { localStorage.setItem('bureau-checklist', JSON.stringify(checked)); } catch (e) {} }
   loadLocal();
   renderChecklist();
-  syncNote.textContent = 'Opslaan wordt verbonden…';
+  syncNote.textContent = '';
 
   // ---------- Gedeelde lijst: reserveringen en afvinken worden bewaard in een Google Sheet (Apps Script) ----------
   const SHEET_URL = 'https://script.google.com/macros/s/AKfycbxqLh5WMDeYRYsAhX8X1h6q9x4TOvd609xVBesHwt9ILlmsiElNNHRwexM5hQL60CqR/exec';
@@ -381,15 +451,15 @@ h1 { margin: 0; font: 600 clamp(22px, 2.6vw, 30px)/1.1 var(--font-display); lett
     const b = e.target.closest('[data-claim], [data-unclaim]'); if (!b || !claimsOn || busy) return;
     const id = b.dataset.claim || b.dataset.unclaim;
     if (b.dataset.claim && !myName) {
-      const n = (prompt('Wat is je naam? Dan ziet iedereen dat jij dit koopt.') || '').trim().slice(0, 40);
+      const n = (prompt(T('Wat is je naam? Dan ziet iedereen dat jij dit koopt.')) || '').trim().slice(0, 40);
       if (!n) return;
       myName = n; try { localStorage.setItem('kerst-naam', n); } catch (e) {}
     }
     busy++; b.disabled = true;
     try {
       const j = await api(b.dataset.claim ? { action: 'claim', id, name: myName, label: BY_ID[id].name } : { action: 'unclaim', id });
-      if (j && j.error === 'taken') syncNote.textContent = j.name + ' was je net voor en koopt dit al.';
-    } catch (err) { syncNote.textContent = 'Reserveren lukte niet. Probeer het zo nog eens.'; renderClaims(); }
+      if (j && j.error === 'taken') setSync(' was je net voor en koopt dit al.', j.name);
+    } catch (err) { setSync('Reserveren lukte niet. Probeer het zo nog eens.'); renderClaims(); }
     finally { busy--; }
   });
   list.addEventListener('click', async e => {
@@ -400,28 +470,47 @@ h1 { margin: 0; font: 600 clamp(22px, 2.6vw, 30px)/1.1 var(--font-display); lett
     if (store === 'local') { saveLocal(); return; }
     busy++; c.disabled = true;
     try { await api({ action: 'bought', id, val: val ? '1' : '0', label: BY_ID[id].name }); }
-    catch (err) { syncNote.textContent = 'Opslaan lukte niet. Probeer het zo nog eens.'; }
+    catch (err) { setSync('Opslaan lukte niet. Probeer het zo nog eens.'); }
     finally { busy--; renderChecklist(); }
   });
   if (!SHEET_URL) {
-    syncNote.textContent = 'Afvinken wordt alleen op dit apparaat bewaard.';
+    setSync('Afvinken wordt alleen op dit apparaat bewaard.');
   } else {
     store = 'sheet'; checked = {}; renderChecklist();
-    syncNote.textContent = 'Lijst wordt geladen…';
+    setSync('Lijst wordt geladen…');
     const refresh = () => {
       if (busy) return;
-      api({}).then(() => { syncNote.textContent = 'Iedereen met deze link ziet wie wat koopt.'; })
-        .catch(() => { syncNote.textContent = 'De gedeelde lijst is even niet bereikbaar; wat je ziet kan verouderd zijn.'; });
+      api({}).then(() => { setSync('Iedereen met deze link ziet wie wat koopt.'); })
+        .catch(() => { setSync('De gedeelde lijst is even niet bereikbaar; wat je ziet kan verouderd zijn.'); });
     };
     refresh();
     setInterval(refresh, 20000);
     document.addEventListener('visibilitychange', () => { if (!document.hidden) refresh(); });
   }
 
+  const langBtns = document.querySelectorAll('[data-lang]');
+  function setLang(l) {
+    lang = l === 'fr' ? 'fr' : 'nl';
+    try { localStorage.setItem('kerst-taal', lang); } catch (e) {}
+    document.documentElement.lang = lang;
+    document.title = T('Kerstlijst Pich');
+    document.querySelectorAll('[data-fr]').forEach(el => {
+      if (el.dataset.nl == null) el.dataset.nl = el.innerHTML;
+      el.innerHTML = lang === 'fr' ? el.dataset.fr : el.dataset.nl;
+    });
+    langBtns.forEach(b => b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));
+    buildList();
+    renderChecklist();
+    if (syncKey) syncNote.textContent = syncPre + T(syncKey);
+    langHooks.forEach(f => f());
+  }
+  langBtns.forEach(b => b.addEventListener('click', () => setLang(b.dataset.lang)));
+  setLang(lang);
+
   const stage = document.getElementById('stage');
   if (!window.THREE || !THREE.OrbitControls) {
     const f = document.createElement('div'); f.className = 'fallback';
-    f.textContent = 'Het 3D-model kon niet laden. Controleer je internetverbinding en herlaad de pagina.';
+    f.textContent = T('Het 3D-model kon niet laden. Controleer je internetverbinding en herlaad de pagina.');
     stage.appendChild(f);
     return;
   }
@@ -1127,7 +1216,7 @@ h1 { margin: 0; font: 600 clamp(22px, 2.6vw, 30px)/1.1 var(--font-display); lett
   function xray(on) { [M.tray, M.side].forEach(m => { m.opacity = on ? 0.14 : 1; m.depthWrite = !on; m.needsUpdate = true; }); }
   function select(id) {
     if (id === 'chair' && !G.chair.visible) showChair(true);
-    selected = id;
+    selected = id; selCurrent = id;
     if (helper) { scene.remove(helper); helper.geometry.dispose(); helper = null; }
     document.querySelectorAll('.part').forEach(b => b.setAttribute('aria-pressed', b.dataset.id === id ? 'true' : 'false'));
     if (id) {
@@ -1139,7 +1228,7 @@ h1 { margin: 0; font: 600 clamp(22px, 2.6vw, 30px)/1.1 var(--font-display); lett
       const dir = camera.position.clone().sub(controls.target).normalize();
       flyTo(center, center.clone().addScaledVector(dir, dist));
       const p = BY_ID[id];
-      selcap.innerHTML = '<span>' + p.cat + '</span>' + p.name;
+      selcap.innerHTML = '<span>' + PT(p, 'cat') + '</span>' + PT(p, 'name');
       const row = document.getElementById('part-' + id);
       if (row && window.innerWidth > 860) row.scrollIntoView({ block: 'nearest', behavior: reduceMotion ? 'auto' : 'smooth' });
     } else {
@@ -1220,7 +1309,7 @@ h1 { margin: 0; font: 600 clamp(22px, 2.6vw, 30px)/1.1 var(--font-display); lett
     design = DESIGNS[d] ? d : '1';
     const cur = DESIGNS[design];
     wallMat.color.set(cur.wall); floor.material.color.set(cur.floor);
-    eyebrow.textContent = cur.label;
+    eyebrow.textContent = T(cur.label);
     modeBtns.forEach(b => { b.hidden = !cur.modes.includes(b.dataset.mode); });   // beide ontwerpen: alleen ijsblauw en wit
     if (!cur.modes.includes(mode)) mode = cur.modes[0];
     syncModes();
@@ -1232,6 +1321,7 @@ h1 { margin: 0; font: 600 clamp(22px, 2.6vw, 30px)/1.1 var(--font-display); lett
   let startDesign = (location.hash.match(/ontwerp-(\d)/) || [])[1];
   if (!startDesign) { try { startDesign = localStorage.getItem('bureau-ontwerp'); } catch (e) {} }
   applyDesign(startDesign || '1');
+  langHooks.push(() => { eyebrow.textContent = T(DESIGNS[design].label); if (selected) { const p = BY_ID[selected]; selcap.innerHTML = '<span>' + PT(p, 'cat') + '</span>' + PT(p, 'name'); } });
 
   const clock = new THREE.Clock();
   let t = 0, scrAcc = 0;
