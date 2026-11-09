@@ -65,6 +65,10 @@ h1 { margin: 0; font: 600 clamp(22px, 2.6vw, 30px)/1.1 var(--font-display); lett
 .dot.white { background: #f4f6fb; }
 .dot.off { background: transparent; border: 1px solid var(--muted); }
 .hint { margin-left: auto; font-size: 12px; color: var(--muted); }
+.more { flex-basis: 100%; display: flex; flex-wrap: wrap; gap: 8px; }
+.more-btn { background: var(--veil); border: 1px solid var(--line); border-radius: 11px; padding: 11px 14px; color: var(--fg); backdrop-filter: blur(8px); }
+.more-btn::after { content: ""; border: solid currentColor; border-width: 0 1.5px 1.5px 0; width: 5px; height: 5px; transform: rotate(45deg) translateY(-2px); transition: transform .2s ease; }
+.more-btn[aria-expanded="true"]::after { transform: rotate(-135deg) translate(-1px, -1px); }
 
 .panel { border-left: 1px solid var(--line); background: var(--surface); display: flex; flex-direction: column; min-height: 0; }
 .panel-head { padding: 22px 20px 10px; display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
@@ -157,32 +161,34 @@ h1 { margin: 0; font: 600 clamp(22px, 2.6vw, 30px)/1.1 var(--font-display); lett
         <button class="btn" data-lang="nl" aria-pressed="true" lang="nl">NL</button>
         <button class="btn" data-lang="fr" aria-pressed="false" lang="fr">FR</button>
       </div>
-      <div class="group" role="group" aria-label="RGB-verlichting">
-        <span class="group-label">RGB</span>
-        <button class="btn" data-mode="rainbow" aria-pressed="true"><span class="dot rainbow"></span><span data-fr="Arc-en-ciel">Regenboog</span></button>
-        <button class="btn" data-mode="ice" aria-pressed="false"><span class="dot ice"></span><span data-fr="Bleu glacier">IJsblauw</span></button>
-        <button class="btn" data-mode="purple" aria-pressed="false"><span class="dot purple"></span><span data-fr="Violet">Paars</span></button>
-        <button class="btn" data-mode="white" aria-pressed="false"><span class="dot white"></span><span data-fr="Blanc">Wit</span></button>
-        <button class="btn" data-mode="off" aria-pressed="false"><span class="dot off"></span><span data-fr="Éteint">Uit</span></button>
-      </div>
       <div class="group" role="group" aria-label="Ontwerp">
-        <span class="group-label" data-fr="Design">Ontwerp</span>
-        <button class="btn" data-design="1" aria-pressed="true"><span class="dot" style="background:#1c2029;border:1px solid #5a6070"></span><span data-fr="1 · sombre">1 · donker</span></button>
-        <button class="btn" data-design="2" aria-pressed="false"><span class="dot" style="background:#dfe2e7"></span><span data-fr="2 · mur blanc">2 · witte muur</span></button>
-      </div>
-      <div class="group" role="group" aria-label="Weergave">
-        <button class="btn" id="t-night" aria-pressed="false" data-fr="Soir">Avond</button>
-        <button class="btn" id="t-vert" aria-pressed="true" data-fr="GPU vertical">GPU verticaal</button>
-        <button class="btn" id="t-rotate" aria-pressed="true" data-fr="Rotation">Draaien</button>
-        <button class="btn" id="t-fans" aria-pressed="true" data-fr="Ventilateurs">Fans aan</button>
-        <button class="btn" id="t-lamp" aria-pressed="true" data-fr="Lampe d’écran">Schermlamp</button>
-        <button class="btn" id="t-chair" aria-pressed="false" data-fr="Chaise">Stoel</button>
+        <button class="btn" data-design="1" aria-pressed="true"><span class="dot" style="background:#1c2029;border:1px solid #5a6070"></span><span data-fr="Mur sombre">Donkere muur</span></button>
+        <button class="btn" data-design="2" aria-pressed="false"><span class="dot" style="background:#dfe2e7"></span><span data-fr="Mur blanc">Witte muur</span></button>
       </div>
       <div class="group" role="group" aria-label="Camera">
         <button class="btn" id="v-home" data-fr="Vue d’ensemble">Overzicht</button>
         <button class="btn" id="v-pc" data-fr="PC de près">PC dichtbij</button>
       </div>
+      <button class="btn more-btn" id="t-more" type="button" aria-expanded="false" aria-controls="more"><span data-fr="Plus d’options">Meer opties</span></button>
       <span class="hint" data-fr="Glissez pour tourner · faites défiler pour zoomer · cliquez sur un objet">Sleep om te draaien · scrol om te zoomen · klik op iets</span>
+      <div class="more" id="more" hidden>
+        <div class="group" role="group" aria-label="RGB-verlichting">
+          <span class="group-label">RGB</span>
+          <button class="btn" data-mode="rainbow" aria-pressed="true"><span class="dot rainbow"></span><span data-fr="Arc-en-ciel">Regenboog</span></button>
+          <button class="btn" data-mode="ice" aria-pressed="false"><span class="dot ice"></span><span data-fr="Bleu glacier">IJsblauw</span></button>
+          <button class="btn" data-mode="purple" aria-pressed="false"><span class="dot purple"></span><span data-fr="Violet">Paars</span></button>
+          <button class="btn" data-mode="white" aria-pressed="false"><span class="dot white"></span><span data-fr="Blanc">Wit</span></button>
+          <button class="btn" data-mode="off" aria-pressed="false"><span class="dot off"></span><span data-fr="Éteint">Uit</span></button>
+        </div>
+        <div class="group" role="group" aria-label="Weergave">
+          <button class="btn" id="t-night" aria-pressed="false" data-fr="Soir">Avond</button>
+          <button class="btn" id="t-vert" aria-pressed="true" data-fr="GPU vertical">GPU verticaal</button>
+          <button class="btn" id="t-rotate" aria-pressed="true" data-fr="Rotation">Draaien</button>
+          <button class="btn" id="t-fans" aria-pressed="true" data-fr="Ventilateurs">Fans aan</button>
+          <button class="btn" id="t-lamp" aria-pressed="true" data-fr="Lampe d’écran">Schermlamp</button>
+          <button class="btn" id="t-chair" aria-pressed="false" data-fr="Chaise">Stoel</button>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -515,6 +521,9 @@ h1 { margin: 0; font: 600 clamp(22px, 2.6vw, 30px)/1.1 var(--font-display); lett
     document.addEventListener('visibilitychange', () => { if (!document.hidden) refresh(); });
   }
 
+  // Extra knoppen (RGB, avond, stoel, ...) zitten achter "Meer opties", zodat de balk rustig blijft
+  const moreBtn = document.getElementById('t-more'), morePanel = document.getElementById('more');
+  moreBtn.addEventListener('click', () => { morePanel.hidden = !morePanel.hidden; moreBtn.setAttribute('aria-expanded', String(!morePanel.hidden)); });
   const langBtns = document.querySelectorAll('[data-lang]');
   function setLang(l) {
     lang = l === 'fr' ? 'fr' : 'nl';
