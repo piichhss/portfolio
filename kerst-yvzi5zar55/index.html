@@ -1,0 +1,1278 @@
+<!doctype html><html lang="nl"><head><meta charset="utf-8"><meta name="robots" content="noindex, nofollow, noarchive"><meta name="referrer" content="no-referrer"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Kerstlijst Pich</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Unbounded:wght@500;600&display=swap">
+<style>
+/* Layout: donkere studio-stage met het 3D-model, onderdelenlijst rechts; op telefoon eronder */
+:root {
+  --bg: #0b0d12;
+  --surface: #11141b;
+  --surface-2: #181c25;
+  --line: #262b37;
+  --fg: #e8ebf2;
+  --muted: #8a92a6;
+  --accent: #9fd6ff;
+  --warn: #ffc27a;
+  --veil: rgba(14, 17, 23, 0.78);
+  --font-display: 'Unbounded', 'Segoe UI', system-ui, sans-serif;
+  --font-body: 'IBM Plex Sans', 'Segoe UI', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, Consolas, monospace;
+  color-scheme: dark;
+}
+html, body { height: 100%; }
+body { background: var(--bg); color: var(--fg); font-family: var(--font-body); font-size: 15px; }
+* { box-sizing: border-box; }
+
+.app { height: 100%; display: grid; grid-template-columns: minmax(0, 1fr) 360px; }
+.stage { position: relative; min-height: 0; overflow: hidden; background: var(--bg); }
+.stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; cursor: grab; }
+.stage canvas:active { cursor: grabbing; }
+
+.hud-top {
+  position: absolute; top: 18px; left: max(18px, env(safe-area-inset-left, 0px)); right: 18px;
+  display: grid; gap: 8px; max-width: 560px; pointer-events: none;
+}
+.eyebrow { margin: 0; font: 500 11px/1 var(--font-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+h1 { margin: 0; font: 600 clamp(22px, 2.6vw, 30px)/1.1 var(--font-display); letter-spacing: -.01em; text-wrap: balance; }
+.sub { margin: 0; color: var(--muted); line-height: 1.4; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 2px; }
+.chip { font: 500 12px/1 var(--font-mono); padding: 6px 9px; border: 1px solid var(--line); border-radius: 999px; background: var(--veil); }
+.chip b { color: var(--accent); font-weight: 600; }
+.chip.warn { border-color: color-mix(in srgb, var(--warn) 45%, transparent); }
+.chip.warn b { color: var(--warn); }
+.selcap { margin: 4px 0 0; font-size: 13px; color: var(--fg); min-height: 1.4em; }
+.selcap span { color: var(--accent); font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; margin-right: 6px; }
+
+.hud-bottom {
+  position: absolute; bottom: 18px; left: max(18px, env(safe-area-inset-left, 0px)); right: 18px;
+  display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+}
+.group { display: flex; flex-wrap: wrap; gap: 2px; padding: 3px; background: var(--veil); border: 1px solid var(--line); border-radius: 11px; backdrop-filter: blur(8px); }
+.group-label { font: 500 10px/1 var(--font-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); padding: 0 8px 0 7px; align-self: center; }
+.btn {
+  font: 500 13px/1 var(--font-body); color: var(--muted); background: transparent; border: 0;
+  padding: 8px 11px; border-radius: 8px; cursor: pointer; display: inline-flex; align-items: center; gap: 7px;
+}
+.btn:hover { color: var(--fg); }
+.btn[hidden] { display: none; }
+.btn[aria-pressed="true"] { background: var(--surface-2); color: var(--fg); }
+.btn:focus-visible, .part:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+.dot.rainbow { background: conic-gradient(#ff5f6d, #ffc371, #7cff9a, #6fd3ff, #b07bff, #ff5f6d); }
+.dot.ice { background: #7cc8ff; }
+.dot.purple { background: #b17bff; }
+.dot.white { background: #f4f6fb; }
+.dot.off { background: transparent; border: 1px solid var(--muted); }
+.hint { margin-left: auto; font-size: 12px; color: var(--muted); }
+
+.panel { border-left: 1px solid var(--line); background: var(--surface); display: flex; flex-direction: column; min-height: 0; }
+.panel-head { padding: 22px 20px 10px; display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.panel-head h2 { margin: 0; font: 600 15px/1.2 var(--font-display); letter-spacing: .01em; }
+.panel-head p { margin: 0; font: 500 12px var(--font-mono); color: var(--muted); }
+.list { list-style: none; margin: 0; padding: 0 10px 10px; overflow: auto; flex: 1; display: grid; gap: 2px; align-content: start; }
+.part {
+  width: 100%; text-align: left; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 3px 14px;
+  padding: 10px; border-radius: 10px; border: 1px solid transparent; background: none; color: inherit; font: inherit; cursor: pointer;
+}
+.part:hover { background: var(--surface-2); }
+.part[aria-pressed="true"] { background: var(--surface-2); border-color: color-mix(in srgb, var(--accent) 45%, transparent); }
+.cat { grid-column: 1; font: 500 10.5px/1.3 var(--font-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.name { grid-column: 1; font-weight: 500; line-height: 1.3; min-width: 0; }
+.price { grid-column: 2; grid-row: 1 / span 2; align-self: center; font: 500 13px var(--font-mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.note { grid-column: 1 / -1; color: var(--muted); font-size: 13px; line-height: 1.45; margin-top: 4px; display: none; }
+.part[aria-pressed="true"] .note { display: block; }
+.flag { display: inline-block; margin-left: 6px; font: 500 10px/1.4 var(--font-mono); color: var(--warn); border: 1px solid color-mix(in srgb, var(--warn) 50%, transparent); border-radius: 999px; padding: 0 6px; letter-spacing: .06em; vertical-align: 1px; }
+.total { border-top: 1px solid var(--line); padding: 16px 20px 20px; display: grid; grid-template-columns: 1fr auto; gap: 2px 12px; align-items: baseline; }
+.total .lbl { font-weight: 500; }
+.total .amt { font: 600 20px var(--font-mono); font-variant-numeric: tabular-nums; }
+.total .split { grid-column: 1 / -1; font: 500 12px var(--font-mono); color: var(--muted); }
+.disclaimer { grid-column: 1 / -1; color: var(--muted); font-size: 12px; line-height: 1.5; margin: 10px 0 0; max-width: 60ch; }
+.fallback { position: absolute; inset: 0; display: grid; place-items: center; padding: 24px; text-align: center; color: var(--muted); }
+
+@media (max-width: 860px) {
+  html, body { height: auto; }
+  .app { height: auto; grid-template-columns: 1fr; }
+  .stage { height: 70svh; min-height: 480px; }
+  .panel { border-left: 0; border-top: 1px solid var(--line); }
+  .list { overflow: visible; }
+  .panel-head, .total { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+  .list { padding-left: max(6px, env(safe-area-inset-left, 0px)); padding-right: max(6px, env(safe-area-inset-right, 0px)); }
+  .hud-top { left: max(16px, env(safe-area-inset-left, 0px)); right: max(16px, env(safe-area-inset-right, 0px)); top: 16px; }
+  .hud-bottom { left: max(16px, env(safe-area-inset-left, 0px)); right: max(16px, env(safe-area-inset-right, 0px)); bottom: 14px; }
+  .hint { display: none; }
+  .sub { display: none; }
+}
+.sep { list-style: none; margin: 14px 10px 4px; padding-top: 12px; border-top: 1px solid var(--line); font: 500 10.5px/1.3 var(--font-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.price.na { color: var(--muted); }
+.sep { display: flex; justify-content: space-between; gap: 10px; }
+.sep-n { letter-spacing: .04em; text-transform: none; font-variant-numeric: tabular-nums; }
+.list > .sep:first-child { border-top: 0; margin-top: 0; padding-top: 4px; }
+.progress { margin: 0 20px; height: 6px; border-radius: 999px; background: var(--surface-2); overflow: hidden; }
+.progress span { display: block; height: 100%; width: 0; background: var(--accent); border-radius: inherit; transition: width .35s ease; }
+.sync { margin: 8px 20px 10px; font-size: 12px; color: var(--muted); min-height: 1.4em; }
+.row { display: grid; grid-template-columns: 34px minmax(0, 1fr); align-items: start; }
+.check {
+  width: 22px; height: 22px; margin: 10px 0 0 6px; padding: 0; border: 1.5px solid var(--muted); border-radius: 6px;
+  background: transparent; color: var(--bg); cursor: pointer; display: grid; place-items: center;
+}
+.check svg { opacity: 0; }
+.check:hover { border-color: var(--fg); }
+.check[aria-checked="true"] { background: var(--accent); border-color: var(--accent); }
+.check[aria-checked="true"] svg { opacity: 1; }
+.check:disabled { cursor: default; opacity: .55; }
+.check:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.row.done .name { text-decoration: line-through; text-decoration-color: color-mix(in srgb, var(--muted) 70%, transparent); color: var(--muted); }
+.row.done .price { color: var(--muted); }
+.buy { grid-column: 2; justify-self: start; margin: -4px 0 8px 10px; font: 500 12px/1.3 var(--font-mono); color: var(--accent); text-decoration: underline; text-underline-offset: 3px; text-decoration-color: color-mix(in srgb, var(--accent) 45%, transparent); padding: 2px 0; }
+.buy:hover { text-decoration-color: var(--accent); }
+.buy:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 3px; }
+.claim { grid-column: 2; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: -2px 0 10px 10px; }
+.claim:empty { display: none; }
+.claimed { font: 500 12px/1.3 var(--font-body); color: var(--warn); padding: 3px 8px; border-radius: 999px; border: 1px solid color-mix(in srgb, var(--warn) 45%, transparent); }
+.claim-btn { font: 500 12px/1 var(--font-body); color: var(--fg); background: var(--surface-2); border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; cursor: pointer; }
+.claim-btn:hover { border-color: var(--muted); }
+.claim-btn:disabled { opacity: .5; cursor: default; }
+.claim-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+@media (max-width: 860px) { .progress { margin: 0 max(16px, env(safe-area-inset-right, 0px)) 0 max(16px, env(safe-area-inset-left, 0px)); } .sync { margin-left: max(16px, env(safe-area-inset-left, 0px)); } }
+</style>
+
+<div class="app">
+  <section class="stage" id="stage" aria-label="3D-model van de bureau-setup">
+    <header class="hud-top">
+      <p class="eyebrow" id="eyebrow">Ontwerp 1 · donkere muur</p>
+      <h1>Witte bureau-setup</h1>
+      <p class="sub">L-bureau · 2 × Philips Evnia 24" · microfoonarm · O11 Dynamic Mini V2 met RTX 5060 Ti</p>
+      <div class="chips">
+        <span class="chip"><b>L</b>-vormig bureau</span>
+        <span class="chip"><b>2 × 24"</b> boven elkaar</span>
+        <span class="chip"><b>glazen</b> muismat</span>
+        <span class="chip warn"><b>Shield</b> past naast fans onderin?</span>
+      </div>
+      <p class="selcap" id="selcap" aria-live="polite"></p>
+    </header>
+
+    <div class="hud-bottom">
+      <div class="group" role="group" aria-label="RGB-verlichting">
+        <span class="group-label">RGB</span>
+        <button class="btn" data-mode="rainbow" aria-pressed="true"><span class="dot rainbow"></span>Regenboog</button>
+        <button class="btn" data-mode="ice" aria-pressed="false"><span class="dot ice"></span>IJsblauw</button>
+        <button class="btn" data-mode="purple" aria-pressed="false"><span class="dot purple"></span>Paars</button>
+        <button class="btn" data-mode="white" aria-pressed="false"><span class="dot white"></span>Wit</button>
+        <button class="btn" data-mode="off" aria-pressed="false"><span class="dot off"></span>Uit</button>
+      </div>
+      <div class="group" role="group" aria-label="Ontwerp">
+        <span class="group-label">Ontwerp</span>
+        <button class="btn" data-design="1" aria-pressed="true"><span class="dot" style="background:#1c2029;border:1px solid #5a6070"></span>1 · donker</button>
+        <button class="btn" data-design="2" aria-pressed="false"><span class="dot" style="background:#dfe2e7"></span>2 · witte muur</button>
+      </div>
+      <div class="group" role="group" aria-label="Weergave">
+        <button class="btn" id="t-night" aria-pressed="false">Avond</button>
+        <button class="btn" id="t-vert" aria-pressed="true">GPU verticaal</button>
+        <button class="btn" id="t-rotate" aria-pressed="true">Draaien</button>
+        <button class="btn" id="t-fans" aria-pressed="true">Fans aan</button>
+        <button class="btn" id="t-lamp" aria-pressed="true">Schermlamp</button>
+        <button class="btn" id="t-chair" aria-pressed="false">Stoel</button>
+      </div>
+      <div class="group" role="group" aria-label="Camera">
+        <button class="btn" id="v-home">Overzicht</button>
+        <button class="btn" id="v-pc">PC dichtbij</button>
+      </div>
+      <span class="hint">Sleep om te draaien · scrol om te zoomen · klik op iets</span>
+    </div>
+  </section>
+
+  <aside class="panel" aria-label="Onderdelen">
+    <div class="panel-head">
+      <h2>Boodschappenlijst</h2>
+      <p id="count"></p>
+    </div>
+    <div class="progress" aria-hidden="true"><span id="bar"></span></div>
+    <p class="sync" id="sync" aria-live="polite"></p>
+    <ul class="list" id="list"></ul>
+    <div class="total">
+      <span class="lbl">Nog te kopen</span>
+      <span class="amt" id="total"></span>
+      <span class="split" id="split"></span>
+      <p class="disclaimer">Wil je iets kopen? Laat het me even weten, zodat niemand hetzelfde koopt. Afvinken onthoudt alleen jouw eigen toestel. Elke link zoekt het product op in de juiste winkel; kijk even of kleur en uitvoering kloppen. Klik op de naam om het in 3D te zien. Het scherm telt één keer mee, zoals in je winkelwagen. Het bureau, de monitorpaal en de microfoon zijn voorbeelden. Ik heb een L-bureau van 170 × 62 cm met een zijvleugel van 80 cm getekend. De PC volgt de specificaties (kast 42,4 × 39,2 × 27,3 cm).</p>
+    </div>
+  </aside>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/CopyShader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/LuminosityHighPassShader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/EffectComposer.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/RenderPass.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/ShaderPass.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/UnrealBloomPass.js"></script>
+<script>
+(function () {
+  const PARTS = [
+    { id: 'case',  cat: 'Behuizing',   name: 'Lian Li O11 Dynamic Mini V2 Flow, wit', price: 99.90, note: 'Staat schuin in de hoek van het L-bureau, met het zijglas naar je stoel. De 5 meegeleverde fans gebruik je niet (geen RGB).' },
+    { id: 'cpu',   cat: 'Processor',   name: 'Intel Core Ultra 5 245KF', price: 160.90, note: 'Zit onder de pomp van de waterkoeler. Heeft geen ingebouwde graphics.' },
+    { id: 'mobo',  cat: 'Moederbord',  name: 'ASUS ROG Strix B860-A Gaming WiFi', price: 188.43, note: 'ATX, wit, met wifi en 4 RAM-slots. De SSD zit onder het witte M.2-koelblok.' },
+    { id: 'ram',   cat: 'Geheugen',    name: 'Lexar Thor RGB 2nd Gen 2 × 8 GB DDR5-6000', price: 289.00, note: 'In slot 2 en 4; twee slots blijven vrij. Wit getekend, zoals je de sticks gaat verven.' },
+    { id: 'ssd',   cat: 'Opslag',      name: 'Lexar NM610 Pro 500 GB', price: 89.00, flag: 'klein', note: 'Onder het M.2-koelblok van het moederbord. 500 GB raakt snel vol met video.' },
+    { id: 'gpu',   cat: 'Videokaart',  name: 'Gigabyte RTX 5060 Ti Eagle OC Ice 8 GB', price: 579.00, note: 'Twee schermen kun je gewoon op de videokaart aansluiten (de 245KF heeft geen eigen graphics). Verticaal heb je een riserkabel nodig.' },
+    { id: 'aio',   cat: 'Waterkoeler', name: 'Cougar Poseidon Vistek Pro ARGB 360, wit', price: 129.00, note: '360 mm-radiator bovenin met 3 ARGB-fans die uitblazen, en een schermpje op de pomp.' },
+    { id: 'f360',  cat: 'Fans onderin', name: 'Cougar Unity 360 ARGB, wit', price: 29.95, note: '3 fans onderin die koele lucht naar de videokaart blazen.' },
+    { id: 'f240',  cat: 'Fans zijkant', name: 'Cougar Unity 240 ARGB Reverse Blade, wit', price: 19.95, note: '2 fans op de zijwand die lucht naar binnen blazen.' },
+    { id: 'psu',   cat: 'Voeding',     name: 'Gigabyte UD750GM PG5 V2 Ice 750 W, wit', price: 89.90, hidden: true, note: 'Zit in de achterste kamer, achter de moederbordplaat.' },
+    { id: 'hub',   cat: 'Fan hub',     name: 'Antec ARGB / Fan Controller', price: 14.90, hidden: true, note: 'Achter de moederbordplaat. Handig om alle 8 fans en hun verlichting aan te sluiten.' },
+    { id: 'monitor', shop: 'amazon', room: true, cat: 'Schermen', name: 'Philips Evnia 24M2N3201PL, 24 inch, wit', price: 99.90, flag: '1 in winkelwagen', note: '24 inch, 1080p, 260 Hz, IPS. In je winkelwagen staat er 1; voor twee boven elkaar heb je er 2 nodig (of je hebt er al één), plus een dubbele monitorarm (VESA), want de eigen voet kan niet stapelen.' },
+    { id: 'shield',  shop: 'amazon', cat: 'GPU-houder', name: 'EZDIY-FAB Shield ARGB verticale GPU-houder, wit', price: 49.99, flag: 'check', note: 'Met PCIe 4.0-riser van 11,5 cm en ARGB. Lost het riser-probleem op. Check wel of hij past boven de Unity 360-fans onderin. De O11 Mini V2 heeft ook al een eigen verticale beugel; dan heb je alleen een losse riserkabel nodig.' },
+    { id: 'mic',     shop: 'amazon', room: true, cat: 'Microfoonarm', name: 'TONOR microfoonarm laag profiel, wit', price: 19.58, note: 'Klemt op de achterrand van het bureau. Een microfoon zit er niet bij: die heb ik als voorbeeld getekend.' },
+    { id: 'phones',  shop: 'amazon', room: true, cat: 'Oordopjes', name: 'Sennheiser CX 80U, USB-C, wit', price: 37.99, note: 'Met kabel en USB-C-stekker, met afstandsbediening en microfoon in de kabel.' },
+    { id: 'lamp',    shop: 'amazon', room: true, cat: 'Schermlamp', name: 'Yeelight Monitor Light Bar 40 cm, wit', price: 34.82, note: 'Hangt bovenop het bovenste scherm en schijnt schuin op je bureau, zonder schittering op het scherm. Met draadloze afstandsbediening en traploos dimbaar; stroom via USB. Zet hem aan of uit met de knop "Schermlamp".' },
+    { id: 'pad',     shop: 'amazon', room: true, cat: 'Muismat', name: 'darkFlash DMP300 glazen muismat, wit, 30 × 26 cm', price: 34.99, note: 'Gehard glas met een geëtst, ultraglad oppervlak en een rubberen antislip-onderkant. Je RS6 heeft een optische sensor, dus die werkt er goed op.' },
+    { id: 'led',     shop: 'amazon', room: true, cat: 'LED-strip', name: 'Goffii LED-strip 10 m, Bluetooth, RGB', price: 9.34, note: 'Zelfklevend, met afstandsbediening en app. Hangt achter het bureau tegen de muur; 10 m is ruim genoeg om ook langs de zijvleugel te gaan. Het is een gewone RGB-strip: ijsblauw lukt prima, maar zijn wit is gemengd uit rood, groen en blauw en oogt daardoor iets blauwer of paarser dan het wit van je fans.' },
+    { id: 'mouse',   shop: 'ali', room: true, cat: 'Muis', name: 'SMAILWOLF RS6 draadloos, zilver', price: 25.49, note: 'Lichte gamingmuis (ca. 59 g) met PAW3311-sensor, draadloos via 2.4G/bluetooth of met kabel. Wit met een grijs barstjespatroon. De PAW3311 is een optische sensor, dus hij werkt goed op glas.' },
+    { id: 'keys',    shop: 'ali', room: true, cat: 'Toetsenbord', name: 'Ajazz Nacodex NK68 wired, wit', price: 38.31, note: '65 %-formaat met 68 toetsen, hot-swappable, red switches (licht en stil), RGB onder de toetsen en een lichtbalk. Met kabel. Door het kleine formaat heb je meer ruimte voor de muis.' },
+    { id: 'shelf',   shop: 'amazon', grp: 'deco', room: true, cat: 'Wandplanken', name: 'OUDIE zwevende wandplanken, wit, set van 3 (40 × 15 cm)', price: 16.99, note: 'Drie witte planken van 40 × 15 × 1,5 cm met verborgen bevestiging. Twee hangen links naast de schermen, één boven de PC. De boeken en potjes erop zijn voorbeelden; de plantjes zijn je Der Rose-set. Hang ze in een muur waar de schroeven goed houden, en zet er geen zware spullen op.' },
+    { id: 'plants',  shop: 'amazon', grp: 'deco', room: true, cat: 'Kunstplanten', name: 'Der Rose kunstmatige mini-planten, set van 4 in pot', price: 15.99, note: 'Rozemarijn, eucalyptus, een aloë en een vetplant, elk in een grijs betonlook-potje. Twee staan op de plank boven de PC, één op de lage plank links en één op het bureau naast de microfoonarm. Geen water of licht nodig.' },
+    { id: 'chair',   optional: true, shop: 'amazon', room: true, cat: 'Bureaustoel', name: 'Ergoreal ergonomische bureaustoel, grijs-wit', price: 89.20, flag: 'optioneel', note: 'Niet nodig, wel fijn. Mesh-rugleuning met verstelbare lendensteun en 2D-hoofdsteun, inklapbare armleuningen, stille wieltjes, tot 200 kg. Ongeveer 68 × 63 × 144 cm. Telt niet mee in het totaal; zet hem in 3D aan met de knop "Stoel".' },
+    { id: 'desk',    desk: true, cat: 'Bureau',        name: 'Wit L-bureau', price: null, note: 'Voorbeeld: 170 cm breed met een zijvleugel van 80 cm. De PC staat op de hoek, zodat hij niet in de weg staat en je het glas ziet.' },
+  ];
+  const BY_ID = Object.fromEntries(PARTS.map(p => [p.id, p]));
+  // Zoektermen per onderdeel, zodat familie het juiste product vindt
+  const LINKQ = {
+    case: 'Lian Li O11 Dynamic Mini V2 Flow White', cpu: 'Intel Core Ultra 5 245KF', mobo: 'ASUS ROG STRIX B860-A GAMING WIFI',
+    ram: 'Lexar Thor RGB 2nd Gen DDR5 2x8GB 6000', ssd: 'Lexar NM610 Pro 500GB', gpu: 'Gigabyte RTX 5060 Ti EAGLE OC ICE 8GB',
+    aio: 'Cougar Poseidon Vistek Pro ARGB 360 wit', f360: 'Cougar Unity 360 ARGB wit', f240: 'Cougar Unity 240 ARGB Reverse Blade wit',
+    psu: 'Gigabyte UD750GM PG5 V2 ICE', hub: 'Antec ARGB Fan Controller',
+    monitor: 'Philips Evnia 24M2N3201PL wit', shield: 'EZDIY-FAB Shield ARGB verticale GPU houder wit', mic: 'TONOR microfoonarm laag profiel wit',
+    phones: 'Sennheiser CX 80U wit', lamp: 'Yeelight Monitor Light Bar 40 cm', pad: 'darkFlash DMP300 glazen muismat wit',
+    led: 'Goffii LED strip 10m bluetooth', mouse: 'SMAILWOLF RS6 wireless mouse', keys: 'Ajazz Nacodex NK68 wired white',
+    shelf: 'OUDIE wandrek wit set van 3 zwevende plank', plants: 'Der Rose kunstmatige mini planten set van 4 in pot', chair: 'Ergoreal bureaustoel ergonomisch grijs wit',
+  };
+  function shopLink(p) {
+    const q = LINKQ[p.id]; if (!q) return null;
+    const shop = p.shop || 'megekko';
+    if (shop === 'amazon') return { href: 'https://www.amazon.nl/s?k=' + encodeURIComponent(q), label: 'Zoek op Amazon' };
+    if (shop === 'ali') return { href: 'https://nl.aliexpress.com/w/wholesale-' + encodeURIComponent(q.replace(/\s+/g, '-')) + '.html', label: 'Zoek op AliExpress' };
+    return { href: 'https://www.google.com/search?q=' + encodeURIComponent('site:megekko.nl ' + q), label: 'Zoek op Megekko' };
+  }
+  const eur = new Intl.NumberFormat('nl-NL', { style: 'currency', currency: 'EUR' });
+
+  const list = document.getElementById('list');
+  const groupOf = p => p.desk ? 'desk' : p.optional ? 'optional' : p.grp ? p.grp : (p.shop || 'megekko');
+  const SEP = { megekko: 'Megekko', amazon: 'Amazon', ali: 'AliExpress', deco: 'Decoratie · Amazon', optional: 'Optioneel · telt niet mee', desk: 'Bureau · voorbeeld, niet te koop' };
+  const CHECK_SVG = '<svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M2.5 7.4l3 3 6-6.6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  let lastGroup = null;
+  PARTS.forEach(p => {
+    if (groupOf(p) !== lastGroup) {
+      lastGroup = groupOf(p);
+      const s = document.createElement('li'); s.className = 'sep'; s.dataset.group = lastGroup;
+      s.innerHTML = '<span>' + SEP[lastGroup] + '</span><span class="sep-n"></span>';
+      list.appendChild(s);
+    }
+    const li = document.createElement('li');
+    li.className = 'row' + (p.desk ? ' nocheck' : '');
+    li.id = 'row-' + p.id;
+    li.innerHTML = (p.desk ? '<span class="check-gap"></span>' :
+        '<button class="check" role="checkbox" aria-checked="false" data-check="' + p.id + '" aria-label="' + p.name + ' gekocht">' + CHECK_SVG + '</button>') +
+      '<button class="part" id="part-' + p.id + '" data-id="' + p.id + '" aria-pressed="false">' +
+      '<span class="cat">' + p.cat + (p.flag ? '<span class="flag">' + p.flag + '</span>' : '') + '</span>' +
+      '<span class="name">' + p.name + '</span>' +
+      '<span class="price' + (p.price == null ? ' na' : '') + '">' + (p.price == null ? '—' : eur.format(p.price)) + '</span>' +
+      '<span class="note">' + p.note + '</span></button>';
+    const lk = shopLink(p);
+    if (lk) {
+      const a = document.createElement('a'); a.className = 'buy'; a.href = lk.href; a.target = '_blank'; a.rel = 'noopener';
+      a.textContent = lk.label + ' ↗'; a.setAttribute('aria-label', lk.label + ': ' + p.name + ' (opent in een nieuw tabblad)');
+      li.appendChild(a);
+    }
+    if (!p.desk) { const cd = document.createElement('div'); cd.className = 'claim'; cd.id = 'claim-' + p.id; li.appendChild(cd); }
+    list.appendChild(li);
+  });
+
+  // ---------- Checklist: afvinken wat je gekocht hebt ----------
+  const BUY = PARTS.filter(p => !p.desk);
+  let checked = {};                       // id -> true
+  let canWrite = true, store = 'local';   // 'db' = gedeeld en bewaard bij het artifact, 'local' = alleen dit apparaat
+  // Reserveringen: "Ik koop dit", zodat familie niet dubbel koopt. Alleen ids opslaan, namen bij het tonen ophalen.
+  let claims = {}, claimsOn = false, myId = null, iAmOwner = false, names = {}, claimBusy = {}, countBase = '';
+  const syncNote = document.getElementById('sync');
+  function renderChecklist() {
+    const CORE = BUY.filter(p => !p.optional);
+    const got = CORE.filter(p => checked[p.id]);
+    const spent = got.reduce((s, p) => s + p.price, 0);
+    const all = CORE.reduce((s, p) => s + p.price, 0);
+    const optLeft = BUY.filter(p => p.optional && !checked[p.id]).reduce((s, p) => s + p.price, 0);
+    BUY.forEach(p => {
+      const row = document.getElementById('row-' + p.id);
+      row.classList.toggle('done', !!checked[p.id]);
+      const c = row.querySelector('.check');
+      c.setAttribute('aria-checked', checked[p.id] ? 'true' : 'false');
+      c.disabled = !canWrite;
+    });
+    list.querySelectorAll('.sep').forEach(s => {
+      const g = s.dataset.group; if (g === 'desk') return;
+      const items = BUY.filter(p => groupOf(p) === g);
+      const n = items.filter(p => checked[p.id]).length;
+      const left = items.filter(p => !checked[p.id]).reduce((a, p) => a + p.price, 0);
+      s.querySelector('.sep-n').textContent = n === items.length ? 'alles binnen ✓' : n + '/' + items.length + ' · nog ' + eur.format(left);
+    });
+    countBase = got.length + ' van ' + CORE.length + ' gekocht';
+    document.getElementById('count').textContent = countBase;
+    document.getElementById('bar').style.width = (CORE.length ? (got.length / CORE.length) * 100 : 0) + '%';
+    document.getElementById('total').textContent = eur.format(all - spent);
+    document.getElementById('split').textContent = 'Al gekocht ' + eur.format(spent) + ' van ' + eur.format(all) + (optLeft ? ' · optioneel nog ' + eur.format(optLeft) : '');
+    renderClaims();
+  }
+  function renderClaims() {
+    if (!claimsOn) return;
+    let n = 0;
+    BUY.forEach(p => {
+      const el = document.getElementById('claim-' + p.id); if (!el) return;
+      el.textContent = '';
+      if (checked[p.id]) return;                                   // al gekocht: geen reservering meer nodig
+      const c = claims[p.id];
+      if (c) {
+        n++;
+        const tag = document.createElement('span'); tag.className = 'claimed';
+        tag.textContent = c.by === myId ? 'Jij koopt dit' : ((names[c.by] || 'Iemand') + ' koopt dit');
+        el.appendChild(tag);
+        if (canWrite && (c.by === myId || iAmOwner)) {
+          const b = document.createElement('button'); b.className = 'claim-btn'; b.dataset.unclaim = p.id;
+          b.textContent = c.by === myId ? 'Toch niet' : 'Vrijgeven'; el.appendChild(b);
+        }
+      } else if (canWrite) {
+        const b = document.createElement('button'); b.className = 'claim-btn'; b.dataset.claim = p.id;
+        b.textContent = 'Ik koop dit'; b.setAttribute('aria-label', 'Ik koop ' + p.name); el.appendChild(b);
+      }
+    });
+    document.getElementById('count').textContent = countBase + (n ? ' · ' + n + ' gereserveerd' : '');
+  }
+  function loadLocal() { try { checked = JSON.parse(localStorage.getItem('bureau-checklist') || '{}') || {}; } catch (e) { checked = {}; } }
+  function saveLocal() { try { localStorage.setItem('bureau-checklist', JSON.stringify(checked)); } catch (e) {} }
+  loadLocal();
+  renderChecklist();
+  syncNote.textContent = 'Opslaan wordt verbonden…';
+
+  let db = null, writing = {};
+  list.addEventListener('click', async e => {
+    const b = e.target.closest('[data-claim], [data-unclaim]'); if (!b || !db || !claimsOn) return;
+    const id = b.dataset.claim || b.dataset.unclaim;
+    if (claimBusy[id]) return; claimBusy[id] = true; b.disabled = true;
+    try {
+      if (b.dataset.claim) { claims[id] = { by: myId }; renderClaims(); await db.doc('claims/' + id).set({ by: myId, at: new Date().toISOString() }); }
+      else { delete claims[id]; renderClaims(); await db.doc('claims/' + id).delete(); }
+    } catch (err) {
+      syncNote.textContent = err && err.code === 'invalid_argument' ? 'Je kunt deze lijst bekijken, maar niets reserveren.' : 'Reserveren lukte niet. Probeer het zo nog eens.';
+    } finally { delete claimBusy[id]; }
+  });
+  list.addEventListener('click', async e => {
+    const c = e.target.closest('.check'); if (!c || c.disabled) return;
+    const id = c.dataset.check, val = !checked[id];
+    if (val) checked[id] = true; else delete checked[id];
+    renderChecklist();
+    if (store === 'local' || !db) { saveLocal(); return; }
+    if (writing[id]) { writing[id].next = val; return; }      // één schrijfactie tegelijk per item
+    writing[id] = { next: val };
+    try {
+      while (writing[id] && 'next' in writing[id]) {
+        const v = writing[id].next; delete writing[id].next;
+        await db.doc('checklist/' + id).set({ bought: v, at: new Date().toISOString() });
+      }
+    } catch (err) {
+      if (err && err.code === 'invalid_argument') { canWrite = false; syncNote.textContent = 'Je kunt deze lijst bekijken, maar niet afvinken.'; renderChecklist(); }
+      else syncNote.textContent = 'Opslaan lukte niet. Probeer het zo nog eens.';
+    } finally { delete writing[id]; }
+  });
+
+  (async () => {
+    const cl = window.claude && typeof window.claude.use === 'function' ? window.claude : null;
+    db = cl ? await cl.use('db').catch(() => null) : null;
+    if (!db) { syncNote.textContent = 'Afvinken wordt alleen op dit apparaat bewaard.'; return; }
+    const user = await cl.use('user').catch(() => null);
+    const w = user && user.can ? await Promise.resolve(user.can('data.write')).catch(() => null) : null;
+    if (w === false) canWrite = false;
+    store = 'db';
+    if (user) {
+      myId = await user.id().catch(() => null);
+      iAmOwner = await Promise.resolve(user.isOwner()).catch(() => false);
+    }
+    if (myId) {
+      claimsOn = true;
+      db.collection('claims').onSnapshot(snap => {
+        const next = {};
+        snap.docs.forEach(d => { const v = d.data(); if (v && typeof v.by === 'string' && BY_ID[d.id]) next[d.id] = { by: v.by }; });
+        Object.keys(claimBusy).forEach(id => { if (claims[id]) next[id] = claims[id]; else delete next[id]; });
+        claims = next;
+        renderClaims();
+        const ids = [...new Set(Object.values(claims).map(c => c.by))].filter(i => i !== myId);
+        if (ids.length && user.profiles) user.profiles(ids).then(ps => { ids.forEach(i => { names[i] = (ps[i] && ps[i].name) || ''; }); renderClaims(); }).catch(() => {});
+      }, () => { claimsOn = false; BUY.forEach(p => { const el = document.getElementById('claim-' + p.id); if (el) el.textContent = ''; }); });
+    }
+    let first = true;
+    const timer = setTimeout(() => { syncNote.textContent = 'De opgeslagen lijst is nog niet bereikbaar; wat je ziet kan verouderd zijn.'; }, 10000);
+    db.collection('checklist').onSnapshot(snap => {
+      const next = {};
+      snap.docs.forEach(d => { const v = d.data(); if (v && v.bought && BY_ID[d.id]) next[d.id] = true; });
+      Object.keys(writing).forEach(id => { if (checked[id]) next[id] = true; else delete next[id]; });
+      checked = next;
+      if (!snap.metadata.fromCache) {
+        clearTimeout(timer);
+        syncNote.textContent = canWrite ? 'Opgeslagen bij deze pagina, ook op je telefoon.' : 'Je kunt deze lijst bekijken, maar niet afvinken.';
+      }
+      if (first) { first = false; }
+      renderChecklist();
+    }, () => {
+      clearTimeout(timer);
+      store = 'local'; loadLocal(); renderChecklist();
+      syncNote.textContent = 'Opslaan bij de pagina lukt niet; afvinken wordt nu alleen op dit apparaat bewaard.';
+    });
+  })();
+
+  const stage = document.getElementById('stage');
+  if (!window.THREE || !THREE.OrbitControls) {
+    const f = document.createElement('div'); f.className = 'fallback';
+    f.textContent = 'Het 3D-model kon niet laden. Controleer je internetverbinding en herlaad de pagina.';
+    stage.appendChild(f);
+    return;
+  }
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  renderer.setClearColor(0x0b0d12, 1);
+  stage.prepend(renderer.domElement);
+  const canvas = renderer.domElement;
+
+  const scene = new THREE.Scene();
+  scene.fog = new THREE.Fog(0x0b0d12, 420, 900);
+  const camera = new THREE.PerspectiveCamera(34, 1, 2, 1600);
+  const HOME_POS = new THREE.Vector3(95, 175, 255);
+  const HOME_TGT = new THREE.Vector3(10, 100, 5);
+  const PC_POS = new THREE.Vector3(42, 118, 92);
+  const PC_TGT = new THREE.Vector3(63, 94.3, -14);
+  camera.position.copy(HOME_POS);
+  const controls = new THREE.OrbitControls(camera, canvas);
+  controls.target.copy(HOME_TGT);
+  controls.enableDamping = true;
+  controls.dampingFactor = 0.08;
+  controls.minDistance = 25;
+  controls.maxDistance = 480;
+  controls.maxPolarAngle = Math.PI * 0.49;
+  controls.minAzimuthAngle = -0.95;
+  controls.maxAzimuthAngle = 1.15;
+  controls.autoRotate = !reduceMotion;
+  controls.autoRotateSpeed = 0.35;
+
+  // ---------- Materialen ----------
+  const std = (o) => new THREE.MeshStandardMaterial(o);
+  const M = {
+    white:  std({ color: 0xe9ebf0, roughness: 0.5, metalness: 0.05 }),
+    gloss:  std({ color: 0xf0f2f6, roughness: 0.3, metalness: 0.1 }),
+    paint:  std({ color: 0xf3f4f7, roughness: 0.55 }),
+    face:   std({ color: 0xdfe3ea, roughness: 0.45, metalness: 0.1 }),
+    pcb:    std({ color: 0x25272d, roughness: 0.7 }),
+    dark:   std({ color: 0x2b2e35, roughness: 0.45, metalness: 0.5 }),
+    black:  std({ color: 0x111215, roughness: 0.6, metalness: 0.2 }),
+    slot:   std({ color: 0x3a3d45, roughness: 0.6 }),
+    silver: std({ color: 0xb9bec8, roughness: 0.3, metalness: 0.8 }),
+    tube:   std({ color: 0xf2f3f5, roughness: 0.8 }),
+    hole:   std({ color: 0x2a2d34, roughness: 0.8 }),
+    ssd:    std({ color: 0x1e2a3d, roughness: 0.6 }),
+    tray:   std({ color: 0xe6e8ed, roughness: 0.6, transparent: true, opacity: 1 }),
+    side:   std({ color: 0xe6e8ed, roughness: 0.55, transparent: true, opacity: 1 }),
+    gblade: std({ color: 0xeef0f4, roughness: 0.4 }),
+    glass:  std({ color: 0xcfe0ff, roughness: 0.05, metalness: 0.1, transparent: true, opacity: 0.1, depthWrite: false, side: THREE.DoubleSide }),
+  };
+  const rgbMats = [];
+  function rgbMat(offset, base, extra) {
+    const m = std(Object.assign({ color: 0xe4e6ea, roughness: 0.4, emissive: 0xffffff, emissiveIntensity: base || 2 }, extra || {}));
+    rgbMats.push({ m, offset: offset || 0, base: base || 2 });
+    return m;
+  }
+  function box(w, h, d, mat, x, y, z, parent) {
+    const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat);
+    m.position.set(x, y, z); parent.add(m); return m;
+  }
+  function tube(points, r, mat, parent) {
+    const curve = new THREE.CatmullRomCurve3(points.map(p => new THREE.Vector3(p[0], p[1], p[2])));
+    const m = new THREE.Mesh(new THREE.TubeGeometry(curve, 90, r, 14, false), mat);
+    parent.add(m); return m;
+  }
+  function rrect(shape, x, y, w, h, r) {
+    shape.moveTo(x + r, y); shape.lineTo(x + w - r, y); shape.quadraticCurveTo(x + w, y, x + w, y + r);
+    shape.lineTo(x + w, y + h - r); shape.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+    shape.lineTo(x + r, y + h); shape.quadraticCurveTo(x, y + h, x, y + h - r);
+    shape.lineTo(x, y + r); shape.quadraticCurveTo(x, y, x + r, y);
+  }
+  function canvasTex(w, h) {
+    const cv = document.createElement('canvas'); cv.width = w; cv.height = h;
+    const tex = new THREE.CanvasTexture(cv); tex.anisotropy = 4;
+    return { cv, ctx: cv.getContext('2d'), tex };
+  }
+  function radialTex(inner, outer) {
+    const t = canvasTex(256, 256);
+    const g = t.ctx.createRadialGradient(128, 128, 0, 128, 128, 128);
+    g.addColorStop(0, inner); g.addColorStop(1, outer);
+    t.ctx.fillStyle = g; t.ctx.fillRect(0, 0, 256, 256); t.tex.needsUpdate = true;
+    return t.tex;
+  }
+
+  // ---------- Fans ----------
+  const spinners = [];
+  function makeRotor(r, n, bladeMat, hubMat) {
+    const rotor = new THREE.Group();
+    const hub = new THREE.Mesh(new THREE.CylinderGeometry(r * 0.3, r * 0.3, 1.3, 32), hubMat);
+    hub.rotation.x = Math.PI / 2; rotor.add(hub);
+    const len = r * 0.74;
+    const geo = new THREE.BoxGeometry(len, r * 0.42, 0.12);
+    geo.translate(len / 2 + r * 0.24, 0, 0);
+    for (let i = 0; i < n; i++) {
+      const pivot = new THREE.Group(); pivot.rotation.z = (i / n) * Math.PI * 2;
+      const b = new THREE.Mesh(geo, bladeMat); b.rotation.x = 0.5;
+      pivot.add(b); rotor.add(pivot);
+    }
+    return rotor;
+  }
+  let frameGeo = null;
+  function fanFrameGeo() {
+    if (frameGeo) return frameGeo;
+    const d = 12, s = new THREE.Shape();
+    rrect(s, -d / 2, -d / 2, d, d, d * 0.07);
+    const hole = new THREE.Path(); hole.absarc(0, 0, d * 0.46, 0, Math.PI * 2, true); s.holes.push(hole);
+    frameGeo = new THREE.ExtrudeGeometry(s, { depth: 2.5, bevelEnabled: false, curveSegments: 40 });
+    frameGeo.translate(0, 0, -1.25);
+    return frameGeo;
+  }
+  function makeFan(offset, speed) {
+    const r = 12 * 0.46, g = new THREE.Group();
+    g.add(new THREE.Mesh(fanFrameGeo(), M.white));
+    const ringF = new THREE.Mesh(new THREE.TorusGeometry(r - 0.05, 0.2, 10, 72), rgbMat(offset, 2.2));
+    ringF.position.z = 1.28; g.add(ringF);
+    const ringB = new THREE.Mesh(new THREE.TorusGeometry(r - 0.05, 0.2, 10, 72), rgbMat(offset + 0.04, 1.4));
+    ringB.position.z = -1.28; g.add(ringB);
+    const bladeMat = rgbMat(offset, 0.28, { color: 0xffffff, transparent: true, opacity: 0.72, roughness: 0.35 });
+    const rotor = makeRotor(r - 0.25, 9, bladeMat, M.white);
+    g.add(rotor);
+    const cap = new THREE.Mesh(new THREE.CircleGeometry(r * 0.28, 40), rgbMat(offset + 0.02, 1.6));
+    cap.position.z = 0.67; rotor.add(cap);
+    spinners.push({ rotor, speed: speed || 7 });
+    return g;
+  }
+
+
+  // ---------- Groepen: de PC zit in pcRoot (eigen assen, zie hieronder), het bureau in wereldmaten (cm, vloer y = 0) ----------
+  const pcRoot = new THREE.Group();
+  pcRoot.position.set(63, 95.8, -14);           // pootjes op het bureaublad (y 75), in de hoek van het L
+  pcRoot.rotation.y = -Math.PI / 4;             // schuin: zijglas wijst naar je stoel
+  scene.add(pcRoot);
+  const G = {};
+  PARTS.forEach(p => { const g = new THREE.Group(); g.userData.partId = p.id; G[p.id] = g; (p.desk || p.room ? scene : pcRoot).add(g); });
+
+  // ---------- Behuizing: x voor −21,2 → achter 21,2 · y −19,6 → 19,6 · z rechterwand −13,65 → glas 13,65 ----------
+  const C = G.case;
+  box(42.4, 1, 27.3, M.white, 0, -19.1, 0, C);
+  box(42.4, 1, 27.3, M.white, 0, 19.1, 0, C);
+  for (let i = 0; i < 8; i++) box(36, 0.1, 0.5, M.hole, 0, 19.61, -9 + i * 2.8, C);
+  box(0.8, 37.2, 27.3, M.white, 20.8, 0, 0, C);
+  for (let i = 0; i < 7; i++) box(0.12, 1.2, 11, M.hole, 20.38, -3.5 - i * 2.0, 4.5, C);
+  const sidePanel = box(42.4, 37.2, 0.8, M.side, 0, 0, -13.25, C);
+  const tray = box(41, 37, 0.4, M.tray, -0.2, 0, -3.5, C);
+  sidePanel.userData.xray = true; tray.userData.xray = true;
+  box(0.8, 37.2, 0.8, M.white, -20.8, 0, 13.25, C);          // staander voor-links
+  [-17, 17].forEach(x => [-10.5, 10.5].forEach(z => box(4, 1.2, 3, M.dark, x, -20.2, z, C)));
+
+  const glassGroup = new THREE.Group(); C.add(glassGroup);
+  const gFront = box(0.35, 37.2, 26.4, M.glass, -21.0, 0, -0.2, glassGroup);
+  const gSide = box(41.4, 37.2, 0.35, M.glass, 0.1, 0, 13.45, glassGroup);
+  const edgeMat = new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.22 });
+  [gFront, gSide].forEach(m => {
+    m.userData.noPick = true;
+    const e = new THREE.LineSegments(new THREE.EdgesGeometry(m.geometry), edgeMat);
+    e.position.copy(m.position); glassGroup.add(e);
+  });
+
+  // ---------- Moederbord (ATX 24,4 × 30,5; printplaat op z ≈ −3,14) ----------
+  const MB = G.mobo;
+  box(24.4, 30.5, 0.16, M.pcb, 8.2, -1.95, -3.22, MB);
+  box(2.2, 13, 3.2, M.white, 19.2, 5.5, -1.5, MB);            // I/O-kap
+  box(11, 2, 1.8, M.white, 11.5, 11.6, -2.2, MB);             // VRM boven
+  box(1.8, 9, 1.8, M.white, 17.0, 6.0, -2.2, MB);             // VRM zij
+  [3.6, 4.4, 5.6, 6.4].forEach(x => box(0.6, 13.6, 0.8, M.slot, x, 6.5, -2.75, MB));
+  box(8.9, 0.8, 1.1, M.silver, 7.0, -2.0, -2.6, MB);          // PCIe x16
+  box(8.9, 0.8, 1.0, M.slot, 7.0, -8.5, -2.65, MB);
+  box(2.6, 0.7, 1.0, M.slot, 4.1, -13.0, -2.65, MB);
+  box(8.5, 2.4, 0.6, M.white, 7.0, 1.0, -2.85, MB);           // M.2-koelblok
+  box(6, 5, 1, M.white, 13, -12, -2.65, MB);                  // chipset
+  box(0.9, 5.3, 1.4, M.slot, -3.6, 6, -2.45, MB);             // 24-pin
+  box(2.2, 0.9, 1.2, M.slot, 1.5, 12.7, -2.5, MB);            // EPS
+  box(2.4, 5.3, 1.2, M.tube, -4.9, 6, -2.6, MB);              // witte 24-pin-kabel
+
+  // ---------- CPU + SSD ----------
+  box(4.5, 3.75, 0.3, M.silver, 11.9, 6.5, -2.95, G.cpu);
+  box(8, 2.2, 0.25, M.ssd, 7.0, 1.0, -3.0, G.ssd);
+
+  // ---------- RAM: 2 sticks in slot 2 en 4, wit geverfd ----------
+  [4.4, 6.4].forEach((x, i) => {
+    box(0.75, 13.3, 3.0, M.paint, x, 6.5, -1.64, G.ram);
+    box(0.8, 12.9, 0.4, rgbMat(0.3 + i * 0.05, 2), x, 6.5, 0.06, G.ram);
+  });
+
+  // ---------- Waterkoeler 360 ----------
+  const A = G.aio;
+  const finT = canvasTex(64, 4);
+  finT.ctx.fillStyle = '#dadde3'; finT.ctx.fillRect(0, 0, 64, 4);
+  for (let i = 0; i < 64; i += 4) { finT.ctx.fillStyle = '#b3b8c2'; finT.ctx.fillRect(i, 0, 1.5, 4); }
+  finT.tex.wrapS = finT.tex.wrapT = THREE.RepeatWrapping; finT.tex.repeat.set(30, 1); finT.tex.needsUpdate = true;
+  box(36, 2.7, 12.3, std({ map: finT.tex, roughness: 0.6, metalness: 0.2 }), 0, 17.45, 6, A);
+  [-18.85, 18.85].forEach(x => box(1.7, 3.1, 12.6, M.white, x, 17.45, 6, A));
+  [-12, 0, 12].forEach((x, i) => { const f = makeFan(0.45 + i * 0.07); f.position.set(x, 14.85, 6); f.rotation.x = Math.PI / 2; A.add(f); });
+
+  const pump = new THREE.Group();
+  pump.position.set(11.9, 6.5, -0.65);
+  const ps = new THREE.Shape(); rrect(ps, -3.3, -3.3, 6.6, 6.6, 1.1);
+  const pg = new THREE.ExtrudeGeometry(ps, { depth: 4.0, bevelEnabled: true, bevelThickness: 0.3, bevelSize: 0.3, bevelSegments: 3, curveSegments: 16 });
+  pg.center();
+  pump.add(new THREE.Mesh(pg, M.gloss));
+  const pumpScr = canvasTex(256, 256);
+  const disp = new THREE.Mesh(new THREE.PlaneGeometry(5.0, 5.0), new THREE.MeshBasicMaterial({ map: pumpScr.tex }));
+  disp.position.z = 2.32; pump.add(disp);
+  const frameShape = new THREE.Shape(); rrect(frameShape, -2.85, -2.85, 5.7, 5.7, 0.6);
+  const fh = new THREE.Path(); rrect(fh, -2.55, -2.55, 5.1, 5.1, 0.35); frameShape.holes.push(fh);
+  const pRing = new THREE.Mesh(new THREE.ShapeGeometry(frameShape), rgbMat(0.6, 2.2));
+  pRing.position.z = 2.33; pump.add(pRing);
+  A.add(pump);
+  tube([[8.4, 7.6, -0.2], [5, 10, 2.3], [-6, 11, 3.8], [-15, 12, 4.4], [-18.9, 13.2, 4.4], [-18.9, 16.0, 4.4]], 0.6, M.tube, A);
+  tube([[8.4, 5.4, -0.2], [4.5, 8.6, 3.0], [-7, 10.2, 6.8], [-15.5, 11.8, 7.6], [-18.9, 13.2, 7.6], [-18.9, 16.0, 7.6]], 0.6, M.tube, A);
+
+  // ---------- Videokaart: horizontaal en verticaal ----------
+  function gpuBody(parent) {
+    const b = new THREE.Group();
+    box(21.5, 12.2, 4.0, M.white, 0, 0, 0, b);
+    box(21.5, 12.2, 0.2, M.gloss, 0, 0, -2.1, b);           // backplate
+    box(20.5, 0.1, 3.2, M.face, 0, 6.12, 0, b);             // bovenrand
+    box(19, 0.1, 0.25, M.silver, 0, 6.15, 1.2, b);
+    box(0.2, 12, 4.2, M.silver, 10.75, 0, 0, b);            // slotplaat
+    box(2.2, 0.7, 1.0, M.black, 4.5, 6.4, 0.3, b);          // 8-pin
+    [-5.2, 5.2].forEach(x => {
+      const hole = new THREE.Mesh(new THREE.CircleGeometry(4.6, 56), M.hole);
+      hole.position.set(x, 0, 2.02); b.add(hole);
+      const ring = new THREE.Mesh(new THREE.TorusGeometry(4.65, 0.12, 8, 72), M.silver);
+      ring.position.set(x, 0, 2.05); b.add(ring);
+      const rot = makeRotor(4.3, 11, M.gblade, M.gloss);
+      rot.position.set(x, 0, 2.6); b.add(rot);
+      spinners.push({ rotor: rot, speed: 3.2 });
+    });
+    parent.add(b);
+    return b;
+  }
+  // Lokaal: fans naar +z, bovenrand +y, slotplaat bij +x
+  const gpuV = new THREE.Group(); G.gpu.add(gpuV);
+  const bv = gpuBody(gpuV); bv.position.set(9.65, -9.4, 5.6);
+  // EZDIY-FAB Shield: witte houder met ARGB-paneel en eigen riser (11,5 cm)
+  const SH = G.shield;
+  box(0.6, 14.4, 8.2, M.white, 20.4, -9.4, 5.4, SH);                    // achterplaat bij de sloten
+  box(0.25, 12.4, 6.4, rgbMat(0.7, 1.8, { transparent: true, opacity: 0.85 }), 19.95, -9.4, 5.4, SH); // ARGB-paneel
+  box(22.4, 0.5, 8.2, M.white, 9.6, -15.85, 5.4, SH);                   // bodemsteun onder de kaart
+  box(22.4, 0.25, 0.25, rgbMat(0.75, 1.6), 9.6, -15.6, 9.5, SH);        // lichtrand
+  box(7, 0.18, 4.6, M.gloss, 7.0, -2.4, 0.3, SH);                       // riser
+  box(7, 13.4, 0.18, M.gloss, 7.0, -9.1, 2.7, SH);
+  box(7, 0.18, 2.2, M.gloss, 7.0, -15.8, 3.8, SH);
+
+  const gpuH = new THREE.Group(); G.gpu.add(gpuH);
+  const bh = gpuBody(gpuH);
+  bh.rotation.x = Math.PI / 2;                                           // fans omlaag, bovenrand naar het glas
+  bh.position.set(9.65, -4.1, 3.0);
+  gpuH.visible = false;
+
+  // ---------- Unity-fans ----------
+  [-12, 0, 12].forEach((x, i) => { const f = makeFan(0.85 + i * 0.07); f.position.set(x, -17.55, 4); f.rotation.x = -Math.PI / 2; G.f360.add(f); });
+  [6.5, -5.5].forEach((y, i) => { const f = makeFan(0.15 + i * 0.08); f.position.set(-12, y, -2.05); G.f240.add(f); });
+
+  // ---------- Achterste kamer ----------
+  box(15, 15, 8.6, M.white, -10, -11.2, -8.6, G.psu);
+  const grill = new THREE.Mesh(new THREE.CircleGeometry(5.4, 48), M.face);
+  grill.position.set(-10, -11.2, -4.28); G.psu.add(grill);
+  box(9, 3, 2.5, M.black, 6, 8, -5.2, G.hub);
+  for (let i = 0; i < 6; i++) box(0.4, 0.4, 0.15, rgbMat(i * 0.08, 1.5), 2.6 + i * 1.3, 8, -3.88, G.hub);
+
+
+  // ---------- Schaduw en gloed onder de PC ----------
+  const FLOOR_Y = -20.8;
+  const shadow = new THREE.Mesh(new THREE.PlaneGeometry(64, 44), new THREE.MeshBasicMaterial({ map: radialTex('rgba(0,0,0,0.6)', 'rgba(0,0,0,0)'), transparent: true, depthWrite: false }));
+  shadow.rotation.x = -Math.PI / 2; shadow.position.y = FLOOR_Y + 0.06; pcRoot.add(shadow);
+  const glowMat = new THREE.MeshBasicMaterial({ map: radialTex('rgba(255,255,255,0.5)', 'rgba(255,255,255,0)'), transparent: true, depthWrite: false, blending: THREE.AdditiveBlending });
+  const glow = new THREE.Mesh(new THREE.PlaneGeometry(70, 50), glowMat);
+  glow.rotation.x = -Math.PI / 2; glow.position.set(0, FLOOR_Y + 0.1, 6); pcRoot.add(glow);
+
+  // ---------- Kamer (ontwerp 1 = donkere muur, ontwerp 2 = witte muur) ----------
+  const DESIGNS = {
+    '1': { wall: 0x1c2029, floor: 0x15181f, glow: [0.45, 0.75], label: 'Ontwerp 1 · donkere muur', modes: ['ice', 'white'] },
+    '2': { wall: 0xdfe2e7, floor: 0x34373e, glow: [0.22, 0.45], label: 'Ontwerp 2 · witte muur', modes: ['ice', 'white'] },
+  };
+  let design = '1';
+  const floor = new THREE.Mesh(new THREE.PlaneGeometry(900, 900), std({ color: 0x15181f, roughness: 0.92 }));
+  floor.rotation.x = -Math.PI / 2; scene.add(floor);
+  const wallMat = std({ color: 0x1c2029, roughness: 0.95 });
+  const wall = new THREE.Mesh(new THREE.PlaneGeometry(900, 340), wallMat);
+  wall.position.set(0, 170, -42.5); scene.add(wall);
+
+  // ---------- L-bureau: hoofdblad x −80 → 90, z −42 → 20 · vleugel x 40 → 90, z 20 → 100 · blad op y 75 ----------
+  const deskMat = std({ color: 0xeef0f3, roughness: 0.35, metalness: 0.05 });
+  const D = G.desk;
+  box(170, 2.5, 62, deskMat, 5, 73.75, -11, D);
+  box(50, 2.5, 80, deskMat, 65, 73.75, 60, D);
+  [[-77, -39], [-77, 17], [87, -39], [87, 97], [43, 97]].forEach(p => box(4, 72.5, 4, M.white, p[0], 36.25, p[1], D));
+  box(162, 14, 1.2, M.white, 5, 65, -38, D);                    // achterschot
+  box(1.2, 14, 76, M.white, 87, 65, 58, D);                      // zijschot vleugel
+  const deskEdge = new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.08 });
+
+  // ---------- Schermen: 2 × Philips Evnia 24" (wit) boven elkaar op een monitorpaal ----------
+  const MON = G.monitor;
+  const POLE_X = -5, POLE_Z = -37;
+  const MON_Y = [102, 135.5];
+  box(12, 1.6, 9, M.white, POLE_X, 75.8, POLE_Z, MON);           // klem
+  box(3.6, 76, 3.6, M.white, POLE_X, 114, POLE_Z, MON);          // paal
+  const screens = [];
+  function makeMonitor(y, tilt) {
+    const g = new THREE.Group();
+    g.position.set(POLE_X, y, -29); g.rotation.x = tilt;
+    box(54.0, 31.6, 2.2, M.white, 0, 0, -0.4, g);                // witte achterkant
+    box(54.0, 30.6, 0.3, M.black, 0, 0.5, 0.85, g);              // smalle zwarte rand
+    box(54.0, 1.0, 0.5, M.white, 0, -15.3, 0.8, g);              // witte kin
+    const tex = canvasTex(1024, 576);
+    const scr = new THREE.Mesh(new THREE.PlaneGeometry(53.1, 29.9), new THREE.MeshBasicMaterial({ map: tex.tex }));
+    scr.position.set(0, 0.55, 1.02); g.add(scr);
+    box(9, 9, 2.4, M.white, 0, 0, -2.6, g);                      // VESA-plaat
+    MON.add(g);
+    screens.push(tex);
+    return g;
+  }
+  makeMonitor(MON_Y[0], 0);
+  makeMonitor(MON_Y[1], 0.13);
+  MON_Y.forEach(y => box(3, 2.6, 7.5, M.white, POLE_X, y, -33.5, MON));   // armen
+
+  // ---------- Yeelight Monitor Light Bar (40 cm) op het bovenste scherm ----------
+  const LB = G.lamp;
+  LB.position.set(POLE_X, MON_Y[1], -29); LB.rotation.x = 0.13;          // zelfde stand als het bovenste scherm
+  box(5, 0.9, 4.4, M.white, 0, 16.3, -0.4, LB);                           // klem bovenop
+  box(5, 2.2, 0.5, M.white, 0, 15.6, -2.75, LB);                          // achterlip
+  box(3.2, 2.4, 1.2, M.white, 0, 17.4, 1.6, LB);                          // houder naar voren
+  const bar = new THREE.Mesh(new THREE.CylinderGeometry(1.2, 1.2, 40, 32), M.gloss);
+  bar.rotation.z = Math.PI / 2; bar.position.set(0, 18.4, 2.6); LB.add(bar);
+  [-20, 20].forEach(x => { const cap = new THREE.Mesh(new THREE.CylinderGeometry(1.22, 1.22, 0.4, 32), M.silver); cap.rotation.z = Math.PI / 2; cap.position.set(x, 18.4, 2.6); LB.add(cap); });
+  const lampGlowMat = std({ color: 0xffffff, emissive: 0xfff0d8, emissiveIntensity: 1.6, roughness: 0.3 });
+  box(38.4, 0.25, 1.1, lampGlowMat, 0, 17.25, 3.0, LB);                   // lichtstrook aan de onderkant
+  const lampLight = new THREE.SpotLight(0xfff0dc, 1.1, 170, 0.62, 0.7, 1.4);
+  lampLight.position.set(POLE_X, MON_Y[1] + 17.5, -24);
+  lampLight.target.position.set(POLE_X, 75, 12);
+  scene.add(lampLight); scene.add(lampLight.target);
+  const deskPoolMat = new THREE.MeshBasicMaterial({ map: radialTex('rgba(255,240,215,0.32)', 'rgba(255,240,215,0)'), transparent: true, depthWrite: false, blending: THREE.AdditiveBlending });
+  const deskPool = new THREE.Mesh(new THREE.PlaneGeometry(90, 52), deskPoolMat);
+  deskPool.rotation.x = -Math.PI / 2; deskPool.position.set(POLE_X, 75.06, 4); scene.add(deskPool);
+  let lampOn = true;
+
+  // ---------- OUDIE zwevende wandplanken (3 × 40 × 15 × 1,5 cm) met voorbeelddecoratie ----------
+  const SF = G.shelf;
+  const SHELVES = [[-58, 122], [-54, 156], [62, 146]];                 // [x, y] tegen de muur (z −42,5)
+  SHELVES.forEach(([x, y]) => box(40, 1.5, 15, M.white, x, y, -35, SF));
+  const leaf = std({ color: 0x5f8f62, roughness: 0.8 });
+  const pot = std({ color: 0xf1f1ee, roughness: 0.7 });
+  function plant(x, y, z, h) {
+    const p = new THREE.Mesh(new THREE.CylinderGeometry(3.4, 2.7, 6.5, 24), pot); p.position.set(x, y + 3.25, z); SF.add(p);
+    [[0, 0, 0], [1.6, 1.2, 0.8], [-1.5, 0.8, -0.6], [0.4, 2.4, -1.2]].forEach(o => {
+      const b = new THREE.Mesh(new THREE.SphereGeometry(2.8, 14, 10), leaf);
+      b.scale.set(1, h, 1); b.position.set(x + o[0], y + 8 + o[1] * h, z + o[2]); SF.add(b);
+    });
+  }
+  function books(x, y, z, n) {
+    const cols = [0xe9ebef, 0x9aa3b2, 0xcfd5de, 0x3a3f4a, 0xb9c4d6];
+    for (let i = 0; i < n; i++) box(2.4, 15 + (i % 3) * 1.5, 11, std({ color: cols[i % cols.length], roughness: 0.8 }), x + i * 2.5, y + (15 + (i % 3) * 1.5) / 2, z, SF);
+  }
+  // plank 1 (links laag): boeken + plantje
+  books(-74, 122.75, -35.5, 5);
+  // plank 2 (links hoog): vaasje + kleine stapel
+  const vase = new THREE.Mesh(new THREE.CylinderGeometry(2.2, 3.2, 14, 24), M.black); vase.position.set(-66, 163.75, -35); SF.add(vase);
+  box(9, 2.2, 7, M.dark, -52, 157.85, -35, SF); box(8, 2, 6.5, M.white, -52, 159.95, -35, SF);
+  const bowl = new THREE.Mesh(new THREE.CylinderGeometry(4.2, 2.6, 4, 24), pot); bowl.position.set(-42, 158.75, -35); SF.add(bowl);
+  // plank 3 (boven de PC): hangplantje + figuurtje
+  [[48, 0.5], [52, 0.8]].forEach(([x, k]) => box(3, 8 + k * 6, 3, M.gloss, x, 146.75 + (8 + k * 6) / 2, -35, SF));
+
+  // ---------- Der Rose kunstplanten: 4 grijze betonlook-potjes ----------
+  const PL = G.plants;
+  const concrete = std({ color: 0xa8aaa4, roughness: 1 });
+  const soil = std({ color: 0x3b332c, roughness: 1 });
+  const gDark = std({ color: 0x3f7a34, roughness: 0.8 }), gMid = std({ color: 0x5f9a45, roughness: 0.8 }), gPale = std({ color: 0x86b07e, roughness: 0.7 });
+  const aloeTip = std({ color: 0x9a3b3b, roughness: 0.7 });
+  function potAt(x, y, z, r, h) {
+    const g = new THREE.Group(); g.position.set(x, y, z); PL.add(g);
+    const c = new THREE.Mesh(new THREE.CylinderGeometry(r, r * 0.8, h, 28), concrete); c.position.y = h / 2; g.add(c);
+    const d = new THREE.Mesh(new THREE.CylinderGeometry(r * 0.9, r * 0.9, 0.3, 28), soil); d.position.y = h - 0.4; g.add(d);
+    g.userData.top = h - 0.3;
+    return g;
+  }
+  let seed = 11; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  function rosemary(g) {                                        // dunne rechtopstaande takjes
+    for (let i = 0; i < 16; i++) {
+      const a = rnd() * Math.PI * 2, r = rnd() * 2.2, h = 9 + rnd() * 7;
+      const t = new THREE.Mesh(new THREE.CylinderGeometry(0.25, 0.45, h, 6), i % 3 ? gDark : gMid);
+      t.position.set(Math.cos(a) * r, g.userData.top + h / 2, Math.sin(a) * r);
+      t.rotation.set(Math.sin(a) * 0.25, 0, -Math.cos(a) * 0.25); g.add(t);
+    }
+  }
+  function eucalyptus(g) {                                      // ronde bos blaadjes
+    for (let i = 0; i < 26; i++) {
+      const a = rnd() * Math.PI * 2, r = rnd() * 4, y = g.userData.top + 2 + rnd() * 9;
+      const lf = new THREE.Mesh(new THREE.SphereGeometry(1.15, 10, 8), i % 2 ? gMid : gPale);
+      lf.scale.set(1, 0.45, 1); lf.position.set(Math.cos(a) * r, y, Math.sin(a) * r); lf.rotation.z = rnd(); g.add(lf);
+    }
+  }
+  function aloe(g) {                                            // spitse bladeren met rode punt
+    for (let i = 0; i < 9; i++) {
+      const a = (i / 9) * Math.PI * 2, h = 8 + (i % 3) * 3;
+      const piv = new THREE.Group(); piv.position.y = g.userData.top; piv.rotation.y = a; g.add(piv);
+      const lf = new THREE.Mesh(new THREE.ConeGeometry(0.75, h, 8), gDark); lf.position.set(0, h / 2, 0); lf.rotation.z = 0; 
+      const tip = new THREE.Mesh(new THREE.ConeGeometry(0.3, 2, 6), aloeTip); tip.position.y = h / 2 + 0.2; lf.add(tip);
+      const tilt = new THREE.Group(); tilt.rotation.x = 0.28 + (i % 2) * 0.15; tilt.add(lf); piv.add(tilt);
+    }
+  }
+  function rosette(g) {                                         // vetplant-rozet
+    for (let ring = 0; ring < 3; ring++) for (let i = 0; i < 8; i++) {
+      const a = (i / 8) * Math.PI * 2 + ring * 0.4, r = 3.2 - ring * 1.0;
+      const lf = new THREE.Mesh(new THREE.SphereGeometry(1.3 - ring * 0.25, 10, 8), ring === 2 ? gPale : gMid);
+      lf.scale.set(0.7, 0.35, 1.3); lf.position.set(Math.cos(a) * r, g.userData.top + 0.6 + ring * 0.9, Math.sin(a) * r);
+      lf.rotation.y = -a; lf.rotation.x = 0.35; g.add(lf);
+    }
+  }
+  rosemary(potAt(64, 146.75, -35, 4.2, 8));                     // plank boven de PC
+  eucalyptus(potAt(75, 146.75, -35, 4.6, 9));
+  aloe(potAt(-50, 122.75, -35, 3.8, 7));                        // lage plank links
+  rosette(potAt(-48, 75, -30, 4.0, 6));                         // bureau, naast de microfoonarm
+
+  // ---------- Optioneel: Ergoreal bureaustoel (grijs mesh, wit frame), standaard verborgen ----------
+  const CH = G.chair;
+  CH.position.set(-5, 0, 66); CH.rotation.y = 0.18;
+  const mesh = std({ color: 0xc3c7cd, roughness: 0.92 });
+  for (let i = 0; i < 5; i++) {                                        // sterpoot met wieltjes
+    const a = (i / 5) * Math.PI * 2, arm = new THREE.Group(); arm.rotation.y = a; CH.add(arm);
+    box(30, 2.4, 4, M.white, 15, 6.5, 0, arm);
+    const wheel = new THREE.Mesh(new THREE.CylinderGeometry(2.6, 2.6, 2.4, 20), M.black);
+    wheel.rotation.x = Math.PI / 2; wheel.position.set(30, 2.6, 0); arm.add(wheel);
+  }
+  const gas = new THREE.Mesh(new THREE.CylinderGeometry(2.2, 2.6, 38, 20), M.white); gas.position.y = 26; CH.add(gas);
+  box(14, 3, 14, M.dark, 0, 45, 0, CH);                                // mechaniek
+  box(50, 3, 48, M.white, 0, 47.5, 0, CH);                             // zitframe
+  box(48, 5, 46, mesh, 0, 51, -0.5, CH);                               // zitting
+  const back = new THREE.Group(); back.position.set(0, 52, 22); back.rotation.x = -0.14; CH.add(back);
+  box(4, 60, 4, M.white, 0, 22, 2.5, back);                            // ruggengraat
+  box(46, 52, 1.6, mesh, 0, 34, 0, back);                              // mesh-rug
+  box(48, 2.2, 3, M.white, 0, 60.5, 0, back); box(48, 2.2, 3, M.white, 0, 8, 0, back);
+  [-23.5, 23.5].forEach(x => box(2.2, 54, 3, M.white, x, 34, 0, back));
+  box(30, 6, 3.5, M.white, 0, 24, -1.8, back);                         // lendensteun
+  box(2.4, 12, 2.4, M.white, 0, 68, 1, back);                          // hoofdsteun-stang
+  box(30, 11, 2.4, mesh, 0, 77, 0.5, back); box(32, 1.8, 3, M.white, 0, 83, 0.5, back);
+  [-27, 27].forEach(x => {                                             // inklapbare armleuningen
+    box(3, 16, 3, M.white, x, 58, 8, CH);
+    box(5, 2.4, 24, M.white, x, 66.5, 2, CH);
+  });
+  CH.visible = false;
+  function applyLamp() {
+    lampGlowMat.emissiveIntensity = lampOn ? 1.6 : 0;
+    lampLight.intensity = lampOn ? (night ? 1.8 : 1.1) : 0;
+    deskPool.visible = lampOn;
+  }
+
+  // ---------- TONOR microfoonarm (laag profiel) met een voorbeeldmicrofoon ----------
+  const MIC = G.mic;
+  box(5, 6, 6, M.white, -62, 74.5, -40, MIC);                    // klem om de achterrand
+  box(2, 12, 2, M.white, -62, 82, -39, MIC);                     // korte staander
+  tube([[-62, 87.5, -39], [-60, 91, -32], [-55, 92, -22], [-50, 90.5, -14]], 0.55, M.white, MIC);
+  tube([[-61.4, 86.5, -38.6], [-59.4, 89.6, -32], [-54.6, 90.6, -22.4], [-49.6, 89.2, -14.6]], 0.3, M.silver, MIC);   // veer
+  const micBody = new THREE.Mesh(new THREE.CylinderGeometry(2.4, 2.4, 13, 32), M.gloss);
+  micBody.position.set(-48.5, 90, -10); micBody.rotation.x = Math.PI / 2 - 0.25; micBody.rotation.z = 0.35; MIC.add(micBody);
+  const grille = new THREE.Mesh(new THREE.CylinderGeometry(2.45, 2.45, 4.5, 32), M.hole);
+  grille.position.set(0, 4.4, 0); micBody.add(grille);
+
+  // ---------- Sennheiser CX 80U: witte oordopjes met USB-C-kabel ----------
+  const PH = G.phones;
+  [[-36, 13], [-33, 17.5]].forEach((p, i) => {
+    const bud = new THREE.Mesh(new THREE.SphereGeometry(1.0, 20, 14), M.gloss);
+    bud.position.set(p[0], 76.0, p[1]); PH.add(bud);
+    const stem = new THREE.Mesh(new THREE.CylinderGeometry(0.4, 0.5, 2.0, 14), M.gloss);
+    stem.rotation.z = Math.PI / 2 - i * 0.6; stem.position.set(p[0] + 1.3, 75.9, p[1] + i * 0.6); PH.add(stem);
+  });
+  tube([[-34.4, 75.6, 13], [-31, 75.4, 10], [-28, 75.4, 13], [-30.5, 75.4, 16.5], [-31.4, 75.6, 18.3]], 0.13, M.tube, PH);
+  tube([[-30, 75.4, 12], [-25, 75.4, 6], [-20, 75.4, -2], [-12, 75.4, -14]], 0.13, M.tube, PH);
+  box(0.8, 0.5, 2.6, M.white, -22.8, 75.45, 2.1, PH);            // afstandsbediening
+  box(0.9, 0.5, 2.2, M.white, -11.4, 75.45, -15.2, PH);          // USB-C-stekker
+
+  // Schermvullingen: onder de tijdlijn, boven de preview
+  const TRACKS = [
+    { y: 392, h: 34, c: '#4a78b0', clips: [[40, 210], [262, 420], [432, 690], [702, 980]] },
+    { y: 432, h: 34, c: '#7a5cb8', clips: [[180, 330], [560, 760]] },
+    { y: 480, h: 26, c: '#2f8a6a', clips: [[40, 520], [534, 980]] },
+    { y: 512, h: 26, c: '#2f8a6a', clips: [[120, 860]] },
+  ];
+  let playX = 120;
+  function drawFrame(c, x, y, w, h, t) {
+    const g = c.createLinearGradient(x, y, x, y + h);
+    g.addColorStop(0, '#26355a'); g.addColorStop(0.55, '#b0607a'); g.addColorStop(1, '#e09a6a');
+    c.fillStyle = g; c.fillRect(x, y, w, h);
+    c.fillStyle = 'rgba(255,214,150,0.85)';
+    c.beginPath(); c.arc(x + w * 0.62, y + h * (0.62 + Math.sin(t) * 0.02), h * 0.11, 0, Math.PI * 2); c.fill();
+    c.fillStyle = '#141826';
+    for (let i = 0; i < 14; i++) {
+      const bw = w * (0.04 + ((i * 37) % 5) * 0.012), bh = h * (0.18 + ((i * 53) % 7) * 0.05);
+      c.fillRect(x + i * w / 14, y + h - bh, bw + 4, bh);
+    }
+  }
+  function drawLower(t) {
+    const c = screens[0].ctx;
+    c.fillStyle = '#121419'; c.fillRect(0, 0, 1024, 576);
+    c.fillStyle = '#1b1e25'; c.fillRect(0, 0, 1024, 26);
+    c.fillStyle = '#7d8598'; c.font = "500 13px 'IBM Plex Mono', monospace"; c.textAlign = 'left';
+    ['Bestand', 'Bewerken', 'Clip', 'Reeks', 'Effecten', 'Venster'].forEach((s, i) => c.fillText(s, 14 + i * 86, 18));
+    // mediabak
+    c.fillStyle = '#181b22'; c.fillRect(8, 34, 300, 318);
+    for (let i = 0; i < 9; i++) {
+      const x = 18 + (i % 3) * 96, y = 46 + Math.floor(i / 3) * 100;
+      drawFrame(c, x, y, 86, 52, i);
+      c.fillStyle = '#7d8598'; c.fillText('clip_0' + (i + 1), x, y + 70);
+    }
+    // bronmonitor
+    c.fillStyle = '#0c0d11'; c.fillRect(318, 34, 698, 318);
+    drawFrame(c, 430, 46, 474, 266, t * 0.3);
+    c.fillStyle = '#9aa2b4'; c.textAlign = 'center';
+    const secs = Math.floor((playX - 40) / 10);
+    c.fillText('00:00:' + String(secs % 60).padStart(2, '0') + ':' + String(Math.floor(t * 25) % 25).padStart(2, '0'), 667, 336);
+    c.textAlign = 'left';
+    // tijdlijn
+    c.fillStyle = '#16181e'; c.fillRect(0, 360, 1024, 216);
+    c.fillStyle = '#20232b'; c.fillRect(0, 360, 1024, 22);
+    for (let x = 40; x < 1024; x += 50) { c.fillStyle = '#3a3f4b'; c.fillRect(x, 370, 1, 12); }
+    TRACKS.forEach(tr => {
+      c.fillStyle = '#1d2027'; c.fillRect(0, tr.y, 1024, tr.h);
+      tr.clips.forEach(cl => {
+        c.fillStyle = tr.c; c.fillRect(cl[0], tr.y + 2, cl[1] - cl[0], tr.h - 4);
+        c.fillStyle = 'rgba(255,255,255,0.18)'; c.fillRect(cl[0], tr.y + 2, cl[1] - cl[0], 3);
+      });
+    });
+    c.fillStyle = '#e25b5b'; c.fillRect(playX, 362, 2, 214);
+    c.beginPath(); c.moveTo(playX - 6, 362); c.lineTo(playX + 8, 362); c.lineTo(playX + 1, 372); c.fill();
+    screens[0].tex.needsUpdate = true;
+  }
+  function drawUpper(t) {
+    const c = screens[1].ctx;
+    c.fillStyle = '#0c0d11'; c.fillRect(0, 0, 1024, 576);
+    drawFrame(c, 0, 0, 1024, 486, t * 0.3);
+    c.fillStyle = 'rgba(0,0,0,0.55)'; c.fillRect(0, 486, 1024, 90);
+    c.fillStyle = '#2a2e38'; c.fillRect(40, 524, 944, 6);
+    c.fillStyle = '#9fd6ff'; c.fillRect(40, 524, 944 * ((playX - 40) / 940), 6);
+    c.fillStyle = '#cfd6e2'; c.font = "500 18px 'IBM Plex Mono', monospace"; c.textAlign = 'left';
+    c.fillText('Programma · 4K · 25 fps', 40, 510);
+    c.textAlign = 'right'; c.fillText('100%', 984, 510);
+    screens[1].tex.needsUpdate = true;
+  }
+
+  // ---------- Ajazz Nacodex NK68 (wit, 65 %, 68 toetsen, RGB onder de toetsen + lichtbalk) ----------
+  const K = G.keys;
+  const KB_X = -4, KB_Z = 12, U = 1.905;
+  box(31.8, 2.2, 10.8, M.gloss, KB_X, 76.1, KB_Z, K);                          // behuizing
+  box(30.6, 0.12, 9.7, rgbMat(0.3, 1.6), KB_X, 77.25, KB_Z, K);                 // RGB tussen de toetsen
+  const KB_ROWS = [
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1],
+    [1.5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1.5, 1],
+    [1.75, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2.25, 1],
+    [2.25, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1.75, 1, 1],
+    [1.25, 1.25, 1.25, 6.25, 1, 1, 1, 1, 1, 1],
+  ];
+  KB_ROWS.forEach((row, ri) => {
+    let acc = 0;
+    row.forEach(w => {
+      const cx = KB_X - 8 * U + (acc + w / 2) * U;
+      box(w * U - 0.3, 0.85, U - 0.3, rgbMat((acc / 16) * 0.6, 0.1, { color: 0xf7f8fa, roughness: 0.55 }), cx, 77.75, KB_Z + (ri - 2) * U, K);
+      acc += w;
+    });
+  });
+  box(30.4, 0.35, 0.5, rgbMat(0.05, 2.2), KB_X, 77.0, KB_Z - 5.25, K);       // lichtbalk achter
+  tube([[KB_X - 6, 76.2, KB_Z - 5.4], [KB_X - 6, 75.3, KB_Z - 12], [5, 75.3, -22], [34, 75.3, -22], [44, 75.6, -16]], 0.25, M.tube, K);   // kabel naar de PC
+
+  // SMAILWOLF RS6: zilverwit met een grijs barstjespatroon, geen RGB
+  const crackTex = canvasTex(512, 512);
+  (function drawCracks() {
+    const c = crackTex.ctx;
+    c.fillStyle = '#eceef1'; c.fillRect(0, 0, 512, 512);
+    let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+    c.lineCap = 'round';
+    for (let i = 0; i < 70; i++) {
+      let x = rnd() * 512, y = rnd() * 512, a = rnd() * Math.PI * 2;
+      c.strokeStyle = 'rgba(70,74,84,' + (0.25 + rnd() * 0.45) + ')';
+      c.lineWidth = 0.6 + rnd() * 1.6;
+      c.beginPath(); c.moveTo(x, y);
+      const n = 4 + Math.floor(rnd() * 8);
+      for (let k = 0; k < n; k++) { a += (rnd() - 0.5) * 1.3; x += Math.cos(a) * 14; y += Math.sin(a) * 14; c.lineTo(x, y); }
+      c.stroke();
+    }
+    crackTex.tex.needsUpdate = true;
+  })();
+  const MS = G.mouse;
+  const mouse = new THREE.Mesh(new THREE.SphereGeometry(1, 40, 24), std({ map: crackTex.tex, roughness: 0.4, metalness: 0.15 }));
+  mouse.scale.set(3.15, 1.95, 6.15); mouse.position.set(30, 75.45, 12); MS.add(mouse);
+  box(0.55, 0.9, 1.5, M.dark, 30, 77.3, 9.2, MS);                 // scrollwiel
+  box(0.12, 0.5, 4.4, M.hole, 30, 77.2, 8.4, MS);                 // naad tussen de knoppen
+  [10.6, 13.0].forEach(z => box(0.3, 0.55, 1.8, M.silver, 26.95, 76.3, z, MS));   // zijknoppen
+
+  // darkFlash DMP300: wit gehard glas, 30 × 26 cm, afgeronde hoeken, grijs logo rechtsonder
+  const padShape = new THREE.Shape(); rrect(padShape, -15, -13, 30, 26, 1.6);
+  const padGeo = new THREE.ExtrudeGeometry(padShape, { depth: 0.4, bevelEnabled: false, curveSegments: 12 });
+  padGeo.rotateX(-Math.PI / 2);                                      // plat op het bureau, dikte omhoog
+  const padTex = canvasTex(512, 444);
+  (function drawPad() {
+    const c = padTex.ctx;
+    const g = c.createLinearGradient(0, 0, 512, 444);
+    g.addColorStop(0, '#f7f8fa'); g.addColorStop(1, '#e9ecf0');
+    c.fillStyle = g; c.fillRect(0, 0, 512, 444);
+    c.fillStyle = '#b9bec7';                                        // eenvoudig logo-blokje, geen echt merkteken
+    c.fillRect(400, 362, 34, 9); c.fillRect(400, 378, 34, 9); c.fillRect(440, 362, 40, 9); c.fillRect(440, 378, 40, 9);
+    padTex.tex.needsUpdate = true;
+  })();
+  const padTop = new THREE.MeshStandardMaterial({ map: padTex.tex, roughness: 0.18, metalness: 0.08 });
+  const padSide = std({ color: 0xdfe6ee, roughness: 0.1, transparent: true, opacity: 0.85 });
+  const pad = new THREE.Mesh(padGeo, [padTop, padSide]);
+  // UV's van de bovenkant schalen naar 0..1 (de vorm loopt van -15..15 en -13..13)
+  const uv = padGeo.attributes.uv;
+  for (let i = 0; i < uv.count; i++) uv.setXY(i, (uv.getX(i) + 15) / 30, (uv.getY(i) + 13) / 26);
+  pad.position.set(30, 75.0, 9); G.pad.add(pad);
+  const padRubber = box(29.6, 0.12, 25.6, M.black, 30, 75.04, 9, G.pad);
+
+  // ---------- LED-strip achter het bureau ----------
+  box(166, 0.7, 0.7, rgbMat(0.1, 2.4), 5, 72.4, -41.8, G.led);
+  const wallGlowMat = new THREE.MeshBasicMaterial({ map: radialTex('rgba(255,255,255,0.55)', 'rgba(255,255,255,0)'), transparent: true, depthWrite: false, blending: THREE.AdditiveBlending });
+  const wallGlow = new THREE.Mesh(new THREE.PlaneGeometry(240, 90), wallGlowMat);
+  wallGlow.position.set(5, 78, -42.3); scene.add(wallGlow);
+
+  // ---------- Licht ----------
+  const hemi = new THREE.HemisphereLight(0xdfe8ff, 0x14161c, 0.55); scene.add(hemi);
+  const key = new THREE.DirectionalLight(0xffffff, 0.6); key.position.set(120, 260, 200); scene.add(key);
+  const rim = new THREE.DirectionalLight(0xbcd2ff, 0.22); rim.position.set(-200, 120, -60); scene.add(rim);
+  const inner = [[0, 12, 6], [0, -14, 6], [-12, 0, 4]].map(p => { const l = new THREE.PointLight(0xffffff, 1.05, 44, 2); l.position.set(p[0], p[1], p[2]); pcRoot.add(l); return l; });
+  const screenLight = new THREE.PointLight(0x9fb8ff, 0.5, 120, 2); screenLight.position.set(-5, 120, 10); scene.add(screenLight);
+  const ledLight = new THREE.PointLight(0xffffff, 0.8, 160, 2); ledLight.position.set(5, 80, -36); scene.add(ledLight);
+
+  let composer = null;
+  if (THREE.EffectComposer && THREE.RenderPass && THREE.UnrealBloomPass) {
+    try {
+      composer = new THREE.EffectComposer(renderer);
+      composer.addPass(new THREE.RenderPass(scene, camera));
+      composer.addPass(new THREE.UnrealBloomPass(new THREE.Vector2(256, 256), 0.8, 0.45, 0.92));
+    } catch (e) { composer = null; }
+  }
+
+  // ---------- Pompscherm ----------
+  const state = { cpu: 42 };
+  let accentHex = '#9fd6ff';
+  function drawPump() {
+    const c = pumpScr.ctx;
+    c.fillStyle = '#05070b'; c.fillRect(0, 0, 256, 256);
+    c.lineWidth = 12; c.lineCap = 'round';
+    const start = Math.PI * 0.75, end = start + Math.PI * 1.5 * (state.cpu / 100);
+    c.strokeStyle = 'rgba(255,255,255,0.12)'; c.beginPath(); c.arc(128, 132, 96, start, Math.PI * 2.25); c.stroke();
+    c.strokeStyle = accentHex; c.beginPath(); c.arc(128, 132, 96, start, end); c.stroke();
+    c.textAlign = 'center';
+    c.fillStyle = '#8a92a6'; c.font = "600 22px 'IBM Plex Mono', monospace"; c.fillText('CPU', 128, 98);
+    c.fillStyle = '#f2f5fa'; c.font = "600 74px 'IBM Plex Mono', monospace"; c.fillText(Math.round(state.cpu) + '°', 138, 162);
+    c.fillStyle = '#8a92a6'; c.font = "500 18px 'IBM Plex Mono', monospace"; c.fillText('2400 rpm', 128, 200);
+    pumpScr.tex.needsUpdate = true;
+  }
+  function tick() { state.cpu = Math.max(38, Math.min(55, state.cpu + (Math.random() - 0.5) * 2.4)); drawPump(); }
+  tick();
+  function redrawAll() { drawPump(); drawLower(0); drawUpper(0); }
+  redrawAll();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(redrawAll);
+  setInterval(tick, 1500);
+
+  // ---------- RGB en avondlicht ----------
+  let mode = 'ice';
+  let night = false;
+  const tmp = new THREE.Color();
+  const STATIC = { ice: 0x7cc8ff, purple: 0xb17bff, white: 0xffffff };
+  function modeColor(t, off) {
+    if (mode === 'rainbow') return tmp.setHSL(((t * 0.07 + off) % 1 + 1) % 1, 1, 0.55);
+    return tmp.set(STATIC[mode] || 0xffffff);
+  }
+  function applyRGB(t) {
+    const scale = mode === 'white' ? 0.6 : 1;
+    rgbMats.forEach(e => {
+      if (mode === 'off') { e.m.emissiveIntensity = 0; return; }
+      e.m.emissive.copy(modeColor(t, e.offset)); e.m.emissiveIntensity = e.base * scale;
+    });
+    if (mode === 'off') {
+      inner.forEach(l => { l.color.set(0xffffff); l.intensity = 0.35; });
+      glowMat.color.set(0x000000); wallGlowMat.color.set(0x000000); ledLight.intensity = 0;
+    } else {
+      inner.forEach((l, i) => { l.color.copy(modeColor(t, i * 0.25)); l.intensity = 1.05; });
+      glowMat.color.copy(modeColor(t, 0.8)).multiplyScalar(0.5);
+      wallGlowMat.color.copy(modeColor(t, 0.1)).multiplyScalar(DESIGNS[design].glow[night ? 1 : 0]);
+      ledLight.color.copy(modeColor(t, 0.1)); ledLight.intensity = night ? 1.4 : 0.8;
+    }
+    accentHex = mode === 'off' ? '#9fd6ff' : '#' + modeColor(t, 0.6).getHexString();
+  }
+  function applyNight() {
+    hemi.intensity = night ? 0.12 : 0.55;
+    key.intensity = night ? 0.08 : 0.6;
+    rim.intensity = night ? 0.05 : 0.22;
+    screenLight.intensity = night ? 1.1 : 0.5;
+    applyLamp();
+  }
+
+  // ---------- Selectie ----------
+  let selected = null, helper = null;
+  const focus = { from: new THREE.Vector3(), to: new THREE.Vector3(), cFrom: new THREE.Vector3(), cTo: new THREE.Vector3(), t: 1 };
+  const selcap = document.getElementById('selcap');
+  const targetOf = id => id === 'gpu' ? (gpuV.visible ? gpuV : gpuH) : G[id];
+  function flyTo(tgt, pos) {
+    focus.from.copy(controls.target); focus.to.copy(tgt);
+    focus.cFrom.copy(camera.position); focus.cTo.copy(pos);
+    focus.t = reduceMotion ? 0.999 : 0;
+  }
+  function xray(on) { [M.tray, M.side].forEach(m => { m.opacity = on ? 0.14 : 1; m.depthWrite = !on; m.needsUpdate = true; }); }
+  function select(id) {
+    if (id === 'chair' && !G.chair.visible) showChair(true);
+    selected = id;
+    if (helper) { scene.remove(helper); helper.geometry.dispose(); helper = null; }
+    document.querySelectorAll('.part').forEach(b => b.setAttribute('aria-pressed', b.dataset.id === id ? 'true' : 'false'));
+    if (id) {
+      const obj = targetOf(id);
+      helper = new THREE.BoxHelper(obj, 0x9fd6ff); scene.add(helper);
+      const bb = new THREE.Box3().setFromObject(obj);
+      const center = bb.getCenter(new THREE.Vector3());
+      const dist = Math.max(38, Math.min(330, bb.getSize(new THREE.Vector3()).length() * 2.1));
+      const dir = camera.position.clone().sub(controls.target).normalize();
+      flyTo(center, center.clone().addScaledVector(dir, dist));
+      const p = BY_ID[id];
+      selcap.innerHTML = '<span>' + p.cat + '</span>' + p.name;
+      const row = document.getElementById('part-' + id);
+      if (row && window.innerWidth > 860) row.scrollIntoView({ block: 'nearest', behavior: reduceMotion ? 'auto' : 'smooth' });
+    } else {
+      selcap.textContent = '';
+    }
+    xray(!!(id && BY_ID[id].hidden));
+  }
+  list.addEventListener('click', e => {
+    const b = e.target.closest('.part'); if (!b) return;
+    select(selected === b.dataset.id ? null : b.dataset.id);
+  });
+  const ray = new THREE.Raycaster(), ndc = new THREE.Vector2();
+  let down = null;
+  const shown = o => { for (let n = o; n; n = n.parent) if (!n.visible) return false; return true; };
+  canvas.addEventListener('pointerdown', e => { down = { x: e.clientX, y: e.clientY }; });
+  canvas.addEventListener('pointerup', e => {
+    if (!down) return;
+    const moved = Math.hypot(e.clientX - down.x, e.clientY - down.y); down = null;
+    if (moved > 6) return;
+    const r = canvas.getBoundingClientRect();
+    ndc.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
+    ray.setFromCamera(ndc, camera);
+    for (const h of ray.intersectObjects(Object.values(G), true)) {
+      const o = h.object;
+      if (o.userData.noPick || !o.isMesh || !shown(o)) continue;
+      if (o.userData.xray && o.material.opacity < 0.5) continue;
+      let n = o; while (n && !n.userData.partId) n = n.parent;
+      if (n) { select(n.userData.partId === selected ? null : n.userData.partId); return; }
+    }
+    select(null);
+  });
+
+  // ---------- Bediening ----------
+  const modeBtns = document.querySelectorAll('[data-mode]');
+  const syncModes = () => modeBtns.forEach(x => x.setAttribute('aria-pressed', x.dataset.mode === mode ? 'true' : 'false'));
+  modeBtns.forEach(b => b.addEventListener('click', () => { mode = b.dataset.mode; syncModes(); }));
+  syncModes();
+  let spin = !reduceMotion;
+  const tNight = document.getElementById('t-night'), tVert = document.getElementById('t-vert'), tRot = document.getElementById('t-rotate'), tFans = document.getElementById('t-fans');
+  tRot.setAttribute('aria-pressed', String(controls.autoRotate));
+  tFans.setAttribute('aria-pressed', String(spin));
+  tNight.addEventListener('click', () => { night = !night; tNight.setAttribute('aria-pressed', String(night)); applyNight(); });
+  tVert.addEventListener('click', () => {
+    gpuV.visible = !gpuV.visible; gpuH.visible = !gpuV.visible; G.shield.visible = gpuV.visible;
+    if (selected === 'shield' && !gpuV.visible) select(null);
+    tVert.setAttribute('aria-pressed', String(gpuV.visible));
+    if (selected === 'gpu') select('gpu');
+  });
+  tRot.addEventListener('click', () => { controls.autoRotate = !controls.autoRotate; tRot.setAttribute('aria-pressed', String(controls.autoRotate)); });
+  tFans.addEventListener('click', () => { spin = !spin; tFans.setAttribute('aria-pressed', String(spin)); });
+  const tLamp = document.getElementById('t-lamp');
+  const tChair = document.getElementById('t-chair');
+  function showChair(on) { G.chair.visible = on; tChair.setAttribute('aria-pressed', String(on)); if (!on && selected === 'chair') select(null); }
+  tChair.addEventListener('click', () => showChair(!G.chair.visible));
+  tLamp.addEventListener('click', () => { lampOn = !lampOn; tLamp.setAttribute('aria-pressed', String(lampOn)); applyLamp(); });
+  document.getElementById('v-home').addEventListener('click', () => { select(null); flyTo(HOME_TGT, HOME_POS); });
+  document.getElementById('v-pc').addEventListener('click', () => { select(null); flyTo(PC_TGT, PC_POS); });
+
+  function resize() {
+    const w = stage.clientWidth, h = stage.clientHeight;
+    if (!w || !h) return;
+    renderer.setSize(w, h, false);
+    camera.aspect = w / h;
+    camera.fov = w / h < 0.9 ? 50 : 34;
+    camera.updateProjectionMatrix();
+    if (composer) {
+      if (composer.setPixelRatio) composer.setPixelRatio(renderer.getPixelRatio());
+      composer.setSize(w, h);
+    }
+  }
+  new ResizeObserver(resize).observe(stage);
+  resize();
+  applyNight();
+
+  const designBtns = document.querySelectorAll('[data-design]');
+  const eyebrow = document.getElementById('eyebrow');
+  function applyDesign(d) {
+    design = DESIGNS[d] ? d : '1';
+    const cur = DESIGNS[design];
+    wallMat.color.set(cur.wall); floor.material.color.set(cur.floor);
+    eyebrow.textContent = cur.label;
+    modeBtns.forEach(b => { b.hidden = !cur.modes.includes(b.dataset.mode); });   // beide ontwerpen: alleen ijsblauw en wit
+    if (!cur.modes.includes(mode)) mode = cur.modes[0];
+    syncModes();
+    designBtns.forEach(b => b.setAttribute('aria-pressed', b.dataset.design === design ? 'true' : 'false'));
+    try { localStorage.setItem('bureau-ontwerp', design); } catch (e) {}
+    try { if (location.hash !== '#ontwerp-' + design) history.replaceState(null, '', '#ontwerp-' + design); } catch (e) {}
+  }
+  designBtns.forEach(b => b.addEventListener('click', () => applyDesign(b.dataset.design)));
+  let startDesign = (location.hash.match(/ontwerp-(\d)/) || [])[1];
+  if (!startDesign) { try { startDesign = localStorage.getItem('bureau-ontwerp'); } catch (e) {} }
+  applyDesign(startDesign || '1');
+
+  const clock = new THREE.Clock();
+  let t = 0, scrAcc = 0;
+  const ease = x => 1 - Math.pow(1 - x, 3);
+  function frame() {
+    const dt = Math.min(clock.getDelta(), 0.05);
+    t += dt;
+    applyRGB(t);
+    if (spin) spinners.forEach(s => { s.rotor.rotation.z += dt * s.speed; });
+    scrAcc += dt;
+    if (scrAcc > 0.1) {
+      scrAcc = 0;
+      if (!reduceMotion) { playX += 3; if (playX > 980) playX = 40; }
+      drawLower(t); drawUpper(t);
+    }
+    if (controls.autoRotate) {                 // heen en weer zwaaien binnen de kijkhoek
+      const az = controls.getAzimuthalAngle();
+      if (az > controls.maxAzimuthAngle - 0.04) controls.autoRotateSpeed = Math.abs(controls.autoRotateSpeed);
+      else if (az < controls.minAzimuthAngle + 0.04) controls.autoRotateSpeed = -Math.abs(controls.autoRotateSpeed);
+    }
+    if (focus.t < 1) {
+      focus.t = Math.min(1, focus.t + dt / 0.8);
+      const k = ease(focus.t);
+      controls.target.lerpVectors(focus.from, focus.to, k);
+      camera.position.lerpVectors(focus.cFrom, focus.cTo, k);
+    }
+    controls.update();
+    if (composer) composer.render(); else renderer.render(scene, camera);
+    requestAnimationFrame(frame);
+  }
+  frame();
+})();
+</script>
+
+</body></html>
