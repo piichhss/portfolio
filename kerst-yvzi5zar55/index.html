@@ -251,7 +251,7 @@ h1 { margin: 0; font: 600 clamp(22px, 2.6vw, 30px)/1.1 var(--font-display); lett
   const FR = {
     'Megekko': 'Megekko', 'Amazon': 'Amazon', 'AliExpress': 'AliExpress',
     'Decoratie · Amazon': 'Décoration · Amazon', 'Optioneel · telt niet mee': 'Optionnel · hors total', 'Bureau · voorbeeld, niet te koop': 'Bureau · exemple, pas à vendre',
-    'Zoek op Amazon': 'Chercher sur Amazon', 'Zoek op AliExpress': 'Chercher sur AliExpress', 'Zoek op Megekko': 'Chercher sur Megekko',
+    'Zoek op Amazon': 'Chercher sur Amazon', 'Naar de winkel': 'Voir en boutique', 'Zoek op AliExpress': 'Chercher sur AliExpress', 'Zoek op Megekko': 'Chercher sur Megekko',
     ' (opent in een nieuw tabblad)': ' (s’ouvre dans un nouvel onglet)', ' gekocht': ' acheté',
     'alles binnen ✓': 'tout est acheté ✓', ' · nog ': ' · reste ', ' van ': ' sur ', ' gekocht ': ' achetés ', 'Al gekocht ': 'Déjà acheté ', ' · optioneel nog ': ' · optionnel encore ',
     'Jij koopt dit': 'Vous l’achetez', 'Iemand': 'Quelqu’un', ' koopt dit': ' l’achète', 'Toch niet': 'Annuler', 'Vrijgeven': 'Libérer',
@@ -309,7 +309,34 @@ h1 { margin: 0; font: 600 clamp(22px, 2.6vw, 30px)/1.1 var(--font-display); lett
     led: 'Goffii LED strip 10m bluetooth', mouse: 'SMAILWOLF RS6 wireless mouse', keys: 'Ajazz Nacodex NK68 wired white',
     shelf: 'OUDIE wandrek wit set van 3 zwevende plank', plants: 'Der Rose kunstmatige mini planten set van 4 in pot', chair: 'Ergoreal bureaustoel ergonomisch grijs wit',
   };
+  // Directe links naar de juiste productpagina (door Pich gekozen); zonder link valt het terug op een zoeklink
+  const LINKS = {
+    case: 'https://www.megekko.nl/product/2013/1161776/PC-Behuizingen/Lian-Li-PC-O11-Dynamic-Mini-V2-Flow-White-Behuizing',
+    cpu: 'https://www.megekko.nl/product/15748/311006/Socket-1851-Processoren/Intel-Core-Ultra-5-245KF',
+    mobo: 'https://www.megekko.nl/product/15745/1153776/Intel-Socket-1851-Moederborden/ASUS-ROG-STRIX-B860-A-GAMING-WIFI',
+    ram: 'https://www.megekko.nl/product/7962/1172637/DDR5-Geheugen/Lexar-DDR5-Thor-RGB-2nd-Gen-2x8GB-6000MHz-CL38-Zwart-LD5U08G60C380V-RGD-geheugenmodule',
+    ssd: 'https://www.megekko.nl/product/5093/10206/SSD-M-2/Lexar-NM610-Pro-500GB-M-2-SSD',
+    gpu: 'https://www.megekko.nl/product/1963/297688/Nvidia-Videokaarten/Gigabyte-GeForce-RTX-5060-TI-EAGLE-OC-ICE-8GB-Videokaart',
+    aio: 'https://www.megekko.nl/product/1986/1164336/All-in-one-waterkoeling/COUGAR-Poseidon-Vistek-Pro-ARGB-360-Wit-waterkoeler',
+    f360: 'https://www.megekko.nl/product/1995/1164160/Case-fans/COUGAR-Gaming-UNITY-360-ARGB-Wit',
+    f240: 'https://www.megekko.nl/product/1995/1164157/Case-fans/COUGAR-Gaming-UNITY-240-ARGB-Reverse-Blade-Wit',
+    psu: 'https://www.megekko.nl/product/4186/1164101/PC-Voedingen-PSU-/Gigabyte-UD750GM-PG5-V2-ICE-Wit-750W-80-Plus-Gold-ATX-3-1-Modulair-PSU-PC-Voeding',
+    hub: 'https://www.megekko.nl/product/2503/1153823/Fan-controllers/Antec-ARGB-Fan-Controller',
+    monitor: 'https://www.amazon.de/-/nl/dp/B0GSB4X1KM?smid=A3JWKAKR8XB7XF&psc=1',
+    shield: 'https://www.amazon.de/-/nl/dp/B0CP4VWWMG?smid=A3T08LE2PAQMXJ&psc=1',
+    mic: 'https://www.amazon.de/-/nl/dp/B0CRYX6KHX?smid=A2P4HAJFBSBQMN&psc=1',
+    phones: 'https://www.amazon.de/-/nl/dp/B0H1N4F5L9?smid=A3JWKAKR8XB7XF&psc=1',
+    lamp: 'https://www.amazon.de/-/nl/dp/B0GTV334F8?smid=AS87FZ84LJUJQ&psc=1',
+    pad: 'https://www.amazon.com.be/-/nl/dp/B0DG8K36Q2',
+    led: 'https://www.amazon.com.be/-/nl/dp/B0D1CGN6GL?smid=A2BQ0R2N9HXJLE&psc=1',
+    mouse: 'https://www.aliexpress.com/item/1005012975412987.html?pdp_npi=6%40dis%21EUR%21EUR%2050.98%21EUR%2025.49%21%21EUR%2025.32%21%21%21%4021038c6f17942488738612462e11ba%2112000059881781732%21ct%21BE%216076485165%21%211%210%21',
+    keys: 'https://www.aliexpress.com/item/1005009240979565.html?pdp_npi=6%40dis%21EUR%21EUR%2088.83%21EUR%2038.31%21%21EUR%2037.93%21%21%21%4021038c6f17942488738612462e11ba%2112000048440766225%21ct%21BE%216076485165%21%211%210%21',
+    shelf: 'https://www.amazon.de/-/nl/dp/B097ZFDSV1?smid=AFKYNO9HHTNW0&psc=1',
+    plants: 'https://www.amazon.de/-/nl/dp/B0GWGY8R98?smid=A27E1RPY6RHR6J&psc=1',
+    chair: 'https://www.amazon.com.be/-/nl/dp/B0DLWJ3T2X?smid=A3W1YAJZVE78ZY&psc=1',
+  };
   function shopLink(p) {
+    if (LINKS[p.id]) return { href: LINKS[p.id], label: T('Naar de winkel') };
     const q = LINKQ[p.id]; if (!q) return null;
     const shop = p.shop || 'megekko';
     if (shop === 'amazon') return { href: 'https://www.amazon.nl/s?k=' + encodeURIComponent(q), label: T('Zoek op Amazon') };
